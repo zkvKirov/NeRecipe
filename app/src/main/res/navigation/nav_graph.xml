@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/recipeFragment">
+
+    <fragment
+        android:id="@+id/recipeFragment"
+        android:name="ru.netology.nerecipe.ui.RecipeFragment"
+        tools:layout="@layout/recipe_fragment" >
+        <action
+            android:id="@+id/action_recipeFragment_to_recipeContentFragment"
+            app:destination="@id/recipeContentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipeContentFragment"
+        android:name="ru.netology.nerecipe.ui.RecipeContentFragment"
+        tools:layout="@layout/recipe_content_fragment" />
+</navigation>

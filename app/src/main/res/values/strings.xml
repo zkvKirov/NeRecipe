@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NeRecipe</string>
+    <string name="menu">Menu</string>
+    <string name="remove">Remove</string>
+    <string name="edit">Edit</string>
+    <string name="favorite">Favorite</string>
+    <string name="newRecipe">Add new recipe</string>
+    <string name="recipe_save">Save recipe</string>
+    <string name="text">Add text</string>
+</resources>
