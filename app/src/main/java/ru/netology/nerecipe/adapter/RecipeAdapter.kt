@@ -74,11 +74,7 @@ class RecipeCardViewHolder(
             title.text = card.title
             authorName.text = card.author
             category.text = card.category
-
-//            like.apply {
-//                text = displayLikes(post.likes)
-//                isChecked = post.likedByMe
-//            }
+            favorite.isChecked = card.isFavorite
         }
     }
 

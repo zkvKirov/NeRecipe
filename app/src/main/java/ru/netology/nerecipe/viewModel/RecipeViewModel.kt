@@ -1,9 +1,12 @@
 package ru.netology.nerecipe.viewModel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipeInteractionListener
 import ru.netology.nerecipe.data.RecipeCard
+import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.repository.FileRecipeRepositoryImpl
 import ru.netology.nerecipe.repository.RecipeRepository
 import ru.netology.nmedia.util.SingleLiveEvent
@@ -16,22 +19,50 @@ class RecipeViewModel(
 
     val data = repository.getAll()
 
-    val navigateToPostContentScreenEvent = SingleLiveEvent<String>()
+    val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult>()
+    val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
+    val navigateToRecipeFragment = SingleLiveEvent<Unit>()
+    private val currentRecipe = MutableLiveData<RecipeCard?> (null)
 
     fun onAddButtonClicked() {
-        navigateToPostContentScreenEvent.call()
+        navigateToRecipeContentScreenEvent.call()
     }
 
+    fun onFavoriteButtonClicked() {
+        navigateToFavoriteFragment.call()
+    }
+
+    fun onRecipeButtonClicked(){
+        navigateToRecipeFragment.call()
+    }
+
+    fun onSaveButtonClicked(recipeCreateResult: RecipeCreateResult) {
+        if (recipeCreateResult.equals(null)) return
+        val newRecipe = currentRecipe.value?.copy(
+            title = recipeCreateResult.newTitle,
+            author = recipeCreateResult.newAuthor,
+            category = recipeCreateResult.newCategory
+        ) ?: RecipeCard(
+            id =RecipeRepository.NEW_RECIPE_ID,
+            title = recipeCreateResult.newTitle,
+            author = recipeCreateResult.newAuthor,
+            category = recipeCreateResult.newCategory
+        )
+        repository.save(newRecipe)
+        currentRecipe.value = null
+    }
 
     override fun onFavoriteClicked(card: RecipeCard) {
-        TODO("Not yet implemented")
+        repository.addFavorite(card.id)
     }
 
     override fun onRemoveClicked(card: RecipeCard) {
-        TODO("Not yet implemented")
+        repository.remove(card.id)
+        Toast.makeText(getApplication(), "Recipe was deleted", Toast.LENGTH_SHORT).show()
     }
 
     override fun onEditClicked(card: RecipeCard) {
-        TODO("Not yet implemented")
+        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category)
+        currentRecipe.value = card
     }
 }

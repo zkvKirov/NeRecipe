@@ -7,7 +7,7 @@ interface RecipeRepository {
 
     fun getAll(): LiveData<List<RecipeCard>>
     fun addFavorite(recipeId: Int)
-    fun remove(recipeId: Long)
+    fun remove(recipeId: Int)
     fun save(card: RecipeCard)
 
     companion object {

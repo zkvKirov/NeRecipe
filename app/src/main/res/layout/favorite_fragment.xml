@@ -7,7 +7,7 @@
     tools:context=".ui.MainActivity">
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_bar"
+        android:id="@+id/search_bar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/design_default_color_on_primary"
@@ -17,45 +17,34 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        android:id="@+id/list_favorite"
         android:layout_width="match_parent"
         android:layout_height="600dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/search_bar"
+        app:layout_constraintTop_toBottomOf="@id/search_bar2"
         tools:listitem="@layout/recipe_card" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_spacing"
-        android:contentDescription="@string/newRecipe"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_add_24dp" />
 
     <Button
         android:id="@+id/recipeButton"
-        style="@style/Widget.MaterialComponents.Button.Icon"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:text="Рецепты"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/barrier"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/favoriteButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:text="Избранное"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@id/barrier" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -65,6 +54,5 @@
         app:barrierDirection="left"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

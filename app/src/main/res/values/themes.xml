@@ -13,4 +13,17 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="LikeButtonColor" parent="Widget.MaterialComponents.Button.TextButton.Icon" >
+        <item name="icon" >@drawable/ic_like_24</item>
+        <item name="iconTint" >@color/like_button</item>
+        <item name="android:minWidth">@dimen/icon_button_min_size</item>
+        <item name="android:minHeight">@dimen/icon_button_min_size</item>
+    </style>
+
+    <style name="ButtonColor" parent="Widget.MaterialComponents.Button.TextButton.Icon" >
+        <item name="iconTint" >@color/button</item>
+        <item name="android:minWidth">@dimen/icon_button_min_size</item>
+        <item name="android:minHeight">@dimen/icon_button_min_size</item>
+    </style>
 </resources>
