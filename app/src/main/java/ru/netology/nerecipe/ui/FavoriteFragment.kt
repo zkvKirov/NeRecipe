@@ -40,7 +40,7 @@ class FavoriteFragment : Fragment() {
 //            }
 //        }
         binding.recipeButton.setOnClickListener {
-            viewModel.onFavoriteButtonClicked()
+            viewModel.onRecipeButtonClicked()
         }
     }.root
 }

@@ -38,7 +38,6 @@ class RecipeFragment : Fragment() {
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
             viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory))
         }
-
     }
 
     override fun onCreateView(
@@ -60,13 +59,7 @@ class RecipeFragment : Fragment() {
             viewModel.onAddButtonClicked()
         }
         binding.favoriteButton.setOnClickListener {
-            viewModel.onRecipeButtonClicked()
+            viewModel.onFavoriteButtonClicked()
         }
     }.root
-
-
-
 }
-
-
-
