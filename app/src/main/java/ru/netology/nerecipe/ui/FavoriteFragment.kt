@@ -2,7 +2,6 @@ package ru.netology.nerecipe.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,14 +30,10 @@ class FavoriteFragment : Fragment() {
     ) = FavoriteFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
         val adapter = RecipeAdapter(viewModel)
         binding.listFavorite.adapter = adapter
-//        viewModel.data.observe(viewLifecycleOwner) { recipes ->
-//            val newRecipe = recipes.size > adapter.itemCount
-//            adapter.submitList(recipes) {
-//                if (newRecipe) {
-//                    binding.listFavorite.smoothScrollToPosition(0)
-//                }
-//            }
-//        }
+        viewModel.data.observe(viewLifecycleOwner) { recipes ->
+            val favorite = recipes.filter { it.isFavorite } // написать код чтобы передавался список избранных рецептов
+            adapter.submitList(favorite)
+        }
         binding.recipeButton.setOnClickListener {
             viewModel.onRecipeButtonClicked()
         }

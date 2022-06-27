@@ -15,6 +15,9 @@
         <action
             android:id="@+id/toFavoriteFragment"
             app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/toFullRecipeFragment"
+            app:destination="@id/fullRecipeFragment" />
     </fragment>
 
     <fragment
@@ -35,5 +38,10 @@
             android:id="@+id/toRecipeFragment"
             app:destination="@id/recipeFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fullRecipeFragment"
+        android:name="ru.netology.nerecipe.ui.FullRecipeFragment"
+        android:label="FullRecipeFragment" />
 
 </navigation>

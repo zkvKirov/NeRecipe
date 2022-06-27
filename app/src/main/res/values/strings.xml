@@ -6,5 +6,8 @@
     <string name="favorite">Favorite</string>
     <string name="newRecipe">Add new recipe</string>
     <string name="recipe_save">Save recipe</string>
-    <string name="text">Add text</string>
+    <string name="text">Add step</string>
+    <string name="category">category</string>
+    <string name="author_name">author name</string>
+    <string name="title_of_recipe">title of recipe</string>
 </resources>

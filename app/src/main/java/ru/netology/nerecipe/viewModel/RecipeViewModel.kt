@@ -22,6 +22,7 @@ class RecipeViewModel(
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
+    val navigateToFullRecipeFragment = SingleLiveEvent<RecipeCard>()
     private val currentRecipe = MutableLiveData<RecipeCard?> (null)
 
     fun onAddButtonClicked() {
@@ -41,12 +42,16 @@ class RecipeViewModel(
         val newRecipe = currentRecipe.value?.copy(
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
-            category = recipeCreateResult.newCategory
+            category = recipeCreateResult.newCategory,
+            step1 = recipeCreateResult.newStep1,
+            step2 = recipeCreateResult.newStep2
         ) ?: RecipeCard(
             id =RecipeRepository.NEW_RECIPE_ID,
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
-            category = recipeCreateResult.newCategory
+            category = recipeCreateResult.newCategory,
+            step1 = recipeCreateResult.newStep1,
+            step2 = recipeCreateResult.newStep2
         )
         repository.save(newRecipe)
         currentRecipe.value = null
@@ -62,7 +67,12 @@ class RecipeViewModel(
     }
 
     override fun onEditClicked(card: RecipeCard) {
-        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category)
+        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category, card.step1, card.step2)
         currentRecipe.value = card
+    }
+
+    override fun onRecipeClicked(card: RecipeCard) {
+        navigateToFullRecipeFragment.value = card
+        //currentRecipe.value = card
     }
 }

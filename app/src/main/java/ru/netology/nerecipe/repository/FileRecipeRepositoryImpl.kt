@@ -83,7 +83,9 @@ class FileRecipeRepositoryImpl(
             if (it.id != card.id) it else it.copy(
                 title = card.title,
                 author = card.author,
-                category = card.category
+                category = card.category,
+                step1 = card.step1,
+                step2 = card.step2
             )
         }
     }

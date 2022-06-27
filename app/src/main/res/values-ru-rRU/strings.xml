@@ -7,5 +7,8 @@
     <string name="favorite">Избранное</string>
     <string name="newRecipe">Добавить новый рецепт</string>
     <string name="recipe_save">Сохранение рецепта</string>
-    <string name="text">Введите текст</string>
+    <string name="text">этап</string>
+    <string name="category">категория</string>
+    <string name="author_name">имя автора</string>
+    <string name="title_of_recipe">название рецепта</string>
 </resources>

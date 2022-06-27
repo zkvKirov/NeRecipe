@@ -28,6 +28,10 @@ class RecipeFragment : Fragment() {
             val direction = RecipeFragmentDirections.toFavoriteFragment()
             findNavController().navigate(direction)
         }
+        viewModel.navigateToFullRecipeFragment.observe(this) {
+            val direction = RecipeFragmentDirections.toFullRecipeFragment()
+            findNavController().navigate(direction)
+        }
 
         setFragmentResultListener(
             requestKey = RecipeContentFragment.REQUEST_KEY
@@ -36,7 +40,9 @@ class RecipeFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory))
+            val step1 = bundle[RecipeContentFragment.STEP1].toString()
+            val step2 = bundle[RecipeContentFragment.STEP2].toString()
+            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
         }
     }
 

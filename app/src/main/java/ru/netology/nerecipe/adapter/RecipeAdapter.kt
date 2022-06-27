@@ -66,6 +66,19 @@ class RecipeCardViewHolder(
         binding.favorite.setOnClickListener {
             listener.onFavoriteClicked(card)
         }
+        // все 4 вызова можно заменить одним через группу, но группа почему то на них все хне растягивается
+        binding.avatar.setOnClickListener {
+            listener.onRecipeClicked(card)
+        }
+        binding.title.setOnClickListener {
+            listener.onRecipeClicked(card)
+        }
+        binding.authorName.setOnClickListener {
+            listener.onRecipeClicked(card)
+        }
+        binding.category.setOnClickListener {
+            listener.onRecipeClicked(card)
+        }
     }
 
     fun bind(card: RecipeCard) {

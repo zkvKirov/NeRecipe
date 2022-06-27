@@ -30,10 +30,12 @@ class RecipeContentFragment : Fragment() {
 
     private fun onOkButtonClicked(binding: RecipeContentFragmentBinding) {
         if (!binding.editTitle.text.isNullOrBlank()) {
-            val resultBundle = Bundle(3)
+            val resultBundle = Bundle(5)
             resultBundle.putString(NEW_TITLE, binding.editTitle.text.toString())
             resultBundle.putString(NEW_AUTHOR, binding.editAuthor.text.toString())
             resultBundle.putString(NEW_CATEGORY, binding.editCategory.text.toString())
+            resultBundle.putString(STEP1, binding.editStep1.text.toString())
+            resultBundle.putString(STEP2, binding.editStep2.text.toString())
             setFragmentResult(REQUEST_KEY, resultBundle)
             Toast.makeText(context, "Успех", Toast.LENGTH_SHORT).show()
         }
@@ -44,7 +46,9 @@ class RecipeContentFragment : Fragment() {
         const val REQUEST_KEY = "createRecipe"
         const val NEW_TITLE = "newTitle"
         const val NEW_AUTHOR = "newAuthor"
-        const val NEW_CATEGORY = "newAuthor"
+        const val NEW_CATEGORY = "newCategory"
+        const val STEP1 = "step1"
+        const val STEP2 = "step2"
     }
 
 }
