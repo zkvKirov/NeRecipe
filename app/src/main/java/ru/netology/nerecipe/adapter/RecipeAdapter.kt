@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.databinding.RecipeCardBinding
+import ru.netology.nerecipe.helper.ItemTouchHelperAdapter
+import java.util.*
 
 class RecipeAdapter(
     private val interactionListener: RecipeInteractionListener
-) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback) {
+) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
+
+    lateinit var list: List<RecipeCard>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,6 +34,20 @@ class RecipeAdapter(
 
         override fun areContentsTheSame(oldItem: RecipeCard, newItem: RecipeCard) =
             oldItem == newItem
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(list, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(list, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+        return true
     }
 }
 
@@ -66,7 +84,6 @@ class RecipeCardViewHolder(
         binding.favorite.setOnClickListener {
             listener.onFavoriteClicked(card)
         }
-        // все 4 вызова можно заменить одним через группу, но группа почему то на них все хне растягивается
         binding.avatar.setOnClickListener {
             listener.onRecipeClicked(card)
         }

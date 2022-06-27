@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import ru.netology.nerecipe.adapter.RecipeAdapter
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.RecipeFragmentBinding
+import ru.netology.nerecipe.helper.SimpleItemTouchHelperCallback
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class RecipeFragment : Fragment() {
@@ -67,5 +69,8 @@ class RecipeFragment : Fragment() {
         binding.favoriteButton.setOnClickListener {
             viewModel.onFavoriteButtonClicked()
         }
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(binding.list)
     }.root
 }

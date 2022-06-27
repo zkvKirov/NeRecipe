@@ -31,8 +31,13 @@ class FavoriteFragment : Fragment() {
         val adapter = RecipeAdapter(viewModel)
         binding.listFavorite.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            val favorite = recipes.filter { it.isFavorite } // написать код чтобы передавался список избранных рецептов
-            adapter.submitList(favorite)
+            val favorite = recipes.filter { it.isFavorite }
+            if (favorite.isEmpty()) {
+                //binding.listFavorite. - что написать чтобы передалась заглушка?
+            } else {
+                adapter.submitList(favorite)
+            }
+
         }
         binding.recipeButton.setOnClickListener {
             viewModel.onRecipeButtonClicked()
