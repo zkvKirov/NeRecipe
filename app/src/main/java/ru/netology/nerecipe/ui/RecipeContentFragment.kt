@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,17 @@ class RecipeContentFragment : Fragment() {
         binding.ok.setOnClickListener {
             onOkButtonClicked(binding)
         }
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            val draft = Bundle(5)
+            draft.putString(NEW_TITLE, binding.editTitle.text.toString())
+            draft.putString(NEW_AUTHOR, binding.editAuthor.text.toString())
+            draft.putString(NEW_CATEGORY, binding.editCategory.text.toString())
+            draft.putString(STEP1, binding.editStep1.text.toString())
+            draft.putString(STEP2, binding.editStep2.text.toString())
+            setFragmentResult(DRAFT_KEY, draft)
+            Toast.makeText(context, "черновик рецепта сохранён", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+        }
     }.root
 
     private fun onOkButtonClicked(binding: RecipeContentFragmentBinding) {
@@ -44,6 +56,7 @@ class RecipeContentFragment : Fragment() {
 
     companion object {
         const val REQUEST_KEY = "createRecipe"
+        const val DRAFT_KEY = "draftRecipe"
         const val NEW_TITLE = "newTitle"
         const val NEW_AUTHOR = "newAuthor"
         const val NEW_CATEGORY = "newCategory"

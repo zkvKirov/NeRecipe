@@ -2,6 +2,7 @@ package ru.netology.nerecipe.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,8 +34,11 @@ class FavoriteFragment : Fragment() {
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
             val favorite = recipes.filter { it.isFavorite }
             if (favorite.isEmpty()) {
-                //binding.listFavorite. - что написать чтобы передалась заглушка?
+                binding.listFavorite.visibility = View.GONE
+                binding.emptySpace2.visibility = View.VISIBLE
             } else {
+                binding.emptySpace2.visibility = View.GONE
+                binding.listFavorite.visibility = View.VISIBLE
                 adapter.submitList(favorite)
             }
 

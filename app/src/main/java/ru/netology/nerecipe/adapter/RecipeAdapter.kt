@@ -1,5 +1,6 @@
 package ru.netology.nerecipe.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -11,12 +12,19 @@ import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.databinding.RecipeCardBinding
 import ru.netology.nerecipe.helper.ItemTouchHelperAdapter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RecipeAdapter(
     private val interactionListener: RecipeInteractionListener
 ) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
 
-    lateinit var list: List<RecipeCard>
+    private var recipelist: List<RecipeCard> = ArrayList()
+
+    //lateinit var context: Context
+
+//    constructor(recipelist: List<RecipeCard>) : this() {
+//        mRecipelist = recipelist
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -36,14 +44,18 @@ class RecipeAdapter(
             oldItem == newItem
     }
 
+//    override fun getItemCount(): Int {
+//        return recipelist.size
+//    }
+
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(list, i, i + 1)
+                Collections.swap(recipelist, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(list, i, i - 1)
+                Collections.swap(recipelist, i, i - 1)
             }
         }
         notifyItemMoved(fromPosition, toPosition)

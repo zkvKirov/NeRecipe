@@ -25,8 +25,8 @@ class RecipeViewModel(
     val navigateToFullRecipeFragment = SingleLiveEvent<RecipeCard>()
     private val currentRecipe = MutableLiveData<RecipeCard?> (null)
 
-    fun onAddButtonClicked() {
-        navigateToRecipeContentScreenEvent.call()
+    fun onAddButtonClicked(draft: RecipeCreateResult?) {
+        navigateToRecipeContentScreenEvent.value = draft
     }
 
     fun onFavoriteButtonClicked() {

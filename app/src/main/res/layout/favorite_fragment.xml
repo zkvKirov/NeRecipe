@@ -16,6 +16,12 @@
         app:iconifiedByDefault="false"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/empty_space_2"
+        android:background="@drawable/empty_state_2"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_favorite"
         android:layout_width="match_parent"
