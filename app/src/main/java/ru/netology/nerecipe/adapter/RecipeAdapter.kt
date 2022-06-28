@@ -20,12 +20,6 @@ class RecipeAdapter(
 
     private var recipelist: List<RecipeCard> = ArrayList()
 
-    //lateinit var context: Context
-
-//    constructor(recipelist: List<RecipeCard>) : this() {
-//        mRecipelist = recipelist
-//    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RecipeCardBinding.inflate(inflater, parent, false)

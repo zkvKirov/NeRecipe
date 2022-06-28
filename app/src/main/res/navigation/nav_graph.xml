@@ -37,6 +37,9 @@
         <action
             android:id="@+id/toRecipeFragment"
             app:destination="@id/recipeFragment" />
+        <action
+            android:id="@+id/toFullRecipeFragment"
+            app:destination="@id/fullRecipeFragment" />
     </fragment>
 
     <fragment

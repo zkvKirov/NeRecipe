@@ -49,7 +49,6 @@ class RecipeContentFragment : Fragment() {
             resultBundle.putString(STEP1, binding.editStep1.text.toString())
             resultBundle.putString(STEP2, binding.editStep2.text.toString())
             setFragmentResult(REQUEST_KEY, resultBundle)
-            Toast.makeText(context, "Успех", Toast.LENGTH_SHORT).show()
         }
         findNavController().popBackStack()
     }

@@ -22,6 +22,10 @@ class FavoriteFragment : Fragment() {
             val direction = FavoriteFragmentDirections.toRecipeFragment()
             findNavController().navigate(direction)
         }
+        viewModel.navigateToFullRecipeFragment.observe(this) {
+            val direction = FavoriteFragmentDirections.toFullRecipeFragment()
+            findNavController().navigate(direction)
+        }
     }
 
     override fun onCreateView(
