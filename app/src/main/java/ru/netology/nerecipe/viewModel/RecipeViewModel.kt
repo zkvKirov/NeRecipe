@@ -21,7 +21,7 @@ class RecipeViewModel(
 
     val data = repository.getAll()
 
-    val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult>()
+    val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
     val navigateToFullRecipeFragment = SingleLiveEvent<RecipeCard>()
