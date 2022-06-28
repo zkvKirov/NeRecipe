@@ -2,7 +2,10 @@ package ru.netology.nerecipe.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,9 +18,17 @@ import kotlin.collections.ArrayList
 
 class RecipeAdapter(
     private val interactionListener: RecipeInteractionListener
-) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
+) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter, Filterable {
 
-    private var recipelist: List<RecipeCard> = ArrayList()
+    private var recipeCardslist: List<RecipeCard> = ArrayList() // сюда необходимо как-то передать актуальный список чтобы рецепты в нём можно было перетаскивать
+
+    private var recipelist: ArrayList<String> = ArrayList()  // сюда необходимо как-то передать актуальный список чтобы искать в нём
+
+    var recipeFilterList = ArrayList<String>()
+
+    init {
+        recipeFilterList = recipelist
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -27,6 +38,10 @@ class RecipeAdapter(
 
     override fun onBindViewHolder(holder: RecipeCardViewHolder, position: Int) {
         holder.bind(getItem(position))
+        // код для поска - закомментировано чтобы не вылетало
+//        val selectCountryTextView =
+//            holder.itemView.findViewById<TextView>(com.google.android.material.R.id.select_dialog_listview)
+//        selectCountryTextView.text = recipeFilterList[position]
     }
 
     private object PostDiffCallback : DiffUtil.ItemCallback<RecipeCard>() {
@@ -37,22 +52,61 @@ class RecipeAdapter(
             oldItem == newItem
     }
 
+    // код для drag & drop
+
 //    override fun getItemCount(): Int {
-//        return recipelist.size
-//    }
+//        return recipeCardslist.size
+//    } // если расскомментировать метод, то при запуске приложения список рецептов отображается всегда будет пустой, даже если рецепты в списке по факту есть
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(recipelist, i, i + 1)
+                Collections.swap(recipeCardslist, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(recipelist, i, i - 1)
+                Collections.swap(recipeCardslist, i, i - 1)
             }
         }
         notifyItemMoved(fromPosition, toPosition)
         return true
+    }
+
+    // код для поиска
+//    override fun getItemCount(): Int {
+//        return recipeFilterList.size
+//    } // если расскомментировать метод, то при запуске приложения список рецептов всегда будет пустой,
+        // при этом операция добавления выполняется и рецепт в нужный список (который не видно на экране) добавляется
+        // а если закомментировать то приложение сразу вылетает, из-за того что размер списка не известен
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString()
+                if (charSearch.isEmpty()) {
+                    recipeFilterList = recipelist
+                } else {
+                    val resultList = ArrayList<String>()
+                    for (row in recipelist) {
+                        if (row.lowercase(Locale.ROOT)
+                                .contains(charSearch.lowercase(Locale.ROOT))
+                        ) {
+                            resultList.add(row)
+                        }
+                    }
+                    recipeFilterList = resultList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = recipeFilterList
+                return filterResults
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                recipeFilterList = results?.values as ArrayList<String>
+                notifyDataSetChanged()
+            }
+        }
     }
 }
 
