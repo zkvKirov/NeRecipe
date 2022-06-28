@@ -9,5 +9,5 @@ class RecipeCreateResult (
     val newAuthor: String?,
     val newCategory: String?,
     val newStep1: String?,
-    val newStep2: String?
+    val newStep2: String
 ) : Parcelable
