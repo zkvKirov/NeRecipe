@@ -41,43 +41,21 @@ class RecipeViewModel(
 
     fun onSaveButtonClicked(recipeCreateResult: RecipeCreateResult) {
         if (recipeCreateResult.equals(null)) return
-        val newRecipe = recipeCreateResult.newTitle?.let {
-            recipeCreateResult.newAuthor?.let { it1 ->
-                recipeCreateResult.newCategory?.let { it2 ->
-                    recipeCreateResult.newStep1?.let { it3 ->
-                        recipeCreateResult.newStep2?.let { it4 ->
-                            currentRecipe.value?.copy(
-                                title = it,
-                                author = it1,
-                                category = it2,
-                                step1 = it3,
-                                step2 = it4
-                            )
-                        }
-                    }
-                }
-            }
-        } ?: recipeCreateResult.newTitle?.let {
-            recipeCreateResult.newAuthor?.let { it1 ->
-                recipeCreateResult.newCategory?.let { it2 ->
-                    recipeCreateResult.newStep1?.let { it3 ->
-                        recipeCreateResult.newStep2?.let { it4 ->
-                            RecipeCard(
-                                id =RecipeRepository.NEW_RECIPE_ID,
-                                title = it,
-                                author = it1,
-                                category = it2,
-                                step1 = it3,
-                                step2 = it4
-                            )
-                        }
-                    }
-                }
-            }
-        }
-        if (newRecipe != null) {
-            repository.save(newRecipe)
-        }
+        val newRecipe = currentRecipe.value?.copy(
+            title = recipeCreateResult.newTitle,
+            author = recipeCreateResult.newAuthor,
+            category = recipeCreateResult.newCategory,
+            step1 = recipeCreateResult.newStep1,
+            step2 = recipeCreateResult.newStep2
+        ) ?: RecipeCard(
+            id =RecipeRepository.NEW_RECIPE_ID,
+            title = recipeCreateResult.newTitle,
+            author = recipeCreateResult.newAuthor,
+            category = recipeCreateResult.newCategory,
+            step1 = recipeCreateResult.newStep1,
+            step2 = recipeCreateResult.newStep2
+        )
+        repository.save(newRecipe)
         Toast.makeText(getApplication(), "Успех", Toast.LENGTH_SHORT).show()
         currentRecipe.value = null
     }
