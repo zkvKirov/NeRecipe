@@ -40,11 +40,21 @@
         <action
             android:id="@+id/toFullRecipeFragment"
             app:destination="@id/fullRecipeFragment" />
+        <action
+            android:id="@+id/toRecipeContentFragment"
+            app:destination="@id/recipeContentFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/fullRecipeFragment"
         android:name="ru.netology.nerecipe.ui.FullRecipeFragment"
-        android:label="FullRecipeFragment" />
+        android:label="FullRecipeFragment" >
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/toRecipeContentFragment"
+            app:destination="@id/recipeContentFragment" />
+    </fragment>
 
 </navigation>

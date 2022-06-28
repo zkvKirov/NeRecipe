@@ -34,7 +34,7 @@ class RecipeFragment : Fragment() {
             findNavController().navigate(direction)
         }
         viewModel.navigateToFullRecipeFragment.observe(this) {
-            val direction = RecipeFragmentDirections.toFullRecipeFragment()
+            val direction = RecipeFragmentDirections.toFullRecipeFragment(it)
             findNavController().navigate(direction)
         }
 
@@ -94,7 +94,9 @@ class RecipeFragment : Fragment() {
         binding.favoriteButton.setOnClickListener {
             viewModel.onFavoriteButtonClicked()
         }
+
         //binding.searchBar.setOnQueryTextListener()
+
         val callback = SimpleItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(binding.list)

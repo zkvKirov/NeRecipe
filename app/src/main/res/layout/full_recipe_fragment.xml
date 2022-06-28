@@ -10,7 +10,7 @@
 
         <include
             android:id="@+id/full_recipe"
-            layout="@layout/full_recipe_card" />
+            layout="@layout/recipe_card" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </ScrollView>

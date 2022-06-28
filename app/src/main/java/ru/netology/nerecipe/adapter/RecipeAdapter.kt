@@ -1,6 +1,5 @@
 package ru.netology.nerecipe.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -83,6 +82,7 @@ class RecipeCardViewHolder(
             }
         }
     }
+
     init {
         binding.menu.setOnClickListener {
             popupMenu.show()
@@ -90,16 +90,7 @@ class RecipeCardViewHolder(
         binding.favorite.setOnClickListener {
             listener.onFavoriteClicked(card)
         }
-        binding.avatar.setOnClickListener {
-            listener.onRecipeClicked(card)
-        }
-        binding.title.setOnClickListener {
-            listener.onRecipeClicked(card)
-        }
-        binding.authorName.setOnClickListener {
-            listener.onRecipeClicked(card)
-        }
-        binding.category.setOnClickListener {
+        binding.groupRecipe.setOnClickListener {
             listener.onRecipeClicked(card)
         }
     }
@@ -111,6 +102,8 @@ class RecipeCardViewHolder(
             authorName.text = card.author
             category.text = card.category
             favorite.isChecked = card.isFavorite
+            step1.text = card.step1
+            step2.text = card.step2
         }
     }
 

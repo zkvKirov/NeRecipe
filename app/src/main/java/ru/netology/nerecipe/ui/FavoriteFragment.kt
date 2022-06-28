@@ -18,12 +18,17 @@ class FavoriteFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.navigateToRecipeContentScreenEvent.observe(this) {
+            val direction = FavoriteFragmentDirections.toRecipeContentFragment(it)
+            findNavController().navigate(direction)
+        }
+
         viewModel.navigateToRecipeFragment.observe(this) {
             val direction = FavoriteFragmentDirections.toRecipeFragment()
             findNavController().navigate(direction)
         }
         viewModel.navigateToFullRecipeFragment.observe(this) {
-            val direction = FavoriteFragmentDirections.toFullRecipeFragment()
+            val direction = FavoriteFragmentDirections.toFullRecipeFragment(it)
             findNavController().navigate(direction)
         }
     }

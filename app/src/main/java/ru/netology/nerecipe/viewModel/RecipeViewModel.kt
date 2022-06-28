@@ -12,6 +12,7 @@ import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.repository.FileRecipeRepositoryImpl
 import ru.netology.nerecipe.repository.RecipeRepository
 import ru.netology.nmedia.util.SingleLiveEvent
+import kotlin.properties.Delegates
 
 class RecipeViewModel(
     application: Application
@@ -20,11 +21,12 @@ class RecipeViewModel(
     private val repository: RecipeRepository = FileRecipeRepositoryImpl(application)
 
     val data = repository.getAll()
+    var recipeId by Delegates.notNull<Int>()
 
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
-    val navigateToFullRecipeFragment = SingleLiveEvent<RecipeCard>()
+    val navigateToFullRecipeFragment = SingleLiveEvent<Int>()
     private val currentRecipe = MutableLiveData<RecipeCard?> (null)
 
     fun onAddButtonClicked(draft: RecipeCreateResult?) {
@@ -92,7 +94,8 @@ class RecipeViewModel(
     }
 
     override fun onRecipeClicked(card: RecipeCard) {
-        navigateToFullRecipeFragment.value = card
-        //currentRecipe.value = card
+        navigateToFullRecipeFragment.value = card.id
+        currentRecipe.value = card
+        recipeId = card.id
     }
 }
