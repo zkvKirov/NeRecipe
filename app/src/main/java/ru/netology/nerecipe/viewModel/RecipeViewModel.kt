@@ -76,7 +76,6 @@ class RecipeViewModel(
 
     override fun onRecipeClicked(card: RecipeCard) {
         navigateToFullRecipeFragment.value = card.id
-        currentRecipe.value = card
         recipeId = card.id
     }
 }

@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.adapter.RecipeAdapter
+import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.FavoriteFragmentBinding
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
@@ -58,4 +60,20 @@ class FavoriteFragment : Fragment() {
             viewModel.onRecipeButtonClicked()
         }
     }.root
+
+    override fun onResume() {
+        super.onResume()
+
+        setFragmentResultListener(
+            requestKey = RecipeContentFragment.REQUEST_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != RecipeContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
+            val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
+            val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
+            val step1 = bundle[RecipeContentFragment.STEP1].toString()
+            val step2 = bundle[RecipeContentFragment.STEP2].toString()
+            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
+        }
+    }
 }
