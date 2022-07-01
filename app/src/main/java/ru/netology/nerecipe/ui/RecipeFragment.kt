@@ -18,7 +18,9 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class RecipeFragment : Fragment() {
 
-    private val viewModel: RecipeViewModel by viewModels()
+    private val viewModel: RecipeViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
 
     private var draft: RecipeCreateResult? = null
 
@@ -37,31 +39,6 @@ class RecipeFragment : Fragment() {
         viewModel.navigateToFullRecipeFragment.observe(this) {
             val direction = RecipeFragmentDirections.toFullRecipeFragment(it)
             findNavController().navigate(direction)
-        }
-
-        setFragmentResultListener(
-            requestKey = RecipeContentFragment.REQUEST_KEY
-        ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.REQUEST_KEY) return@setFragmentResultListener
-            val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
-            val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
-            val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val step1 = bundle[RecipeContentFragment.STEP1].toString()
-            val step2 = bundle[RecipeContentFragment.STEP2].toString()
-            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
-            draft = null
-        }
-
-        setFragmentResultListener(
-            requestKey = RecipeContentFragment.DRAFT_KEY
-        ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.DRAFT_KEY) return@setFragmentResultListener
-            val newRecipeTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
-            val newRecipeAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
-            val newRecipeCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newRecipeStep1 = bundle[RecipeContentFragment.STEP1].toString()
-            val newRecipeStep2 = bundle[RecipeContentFragment.STEP2].toString()
-            draft = RecipeCreateResult(newRecipeTitle, newRecipeAuthor, newRecipeCategory, newRecipeStep1, newRecipeStep2)
         }
 
     }
@@ -113,4 +90,33 @@ class RecipeFragment : Fragment() {
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(binding.list)
     }.root
+
+    override fun onResume() {
+        super.onResume()
+
+        setFragmentResultListener(
+            requestKey = RecipeContentFragment.REQUEST_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != RecipeContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
+            val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
+            val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
+            val step1 = bundle[RecipeContentFragment.STEP1].toString()
+            val step2 = bundle[RecipeContentFragment.STEP2].toString()
+            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
+            draft = null
+        }
+
+        setFragmentResultListener(
+            requestKey = RecipeContentFragment.DRAFT_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != RecipeContentFragment.DRAFT_KEY) return@setFragmentResultListener
+            val newRecipeTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
+            val newRecipeAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
+            val newRecipeCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
+            val newRecipeStep1 = bundle[RecipeContentFragment.STEP1].toString()
+            val newRecipeStep2 = bundle[RecipeContentFragment.STEP2].toString()
+            draft = RecipeCreateResult(newRecipeTitle, newRecipeAuthor, newRecipeCategory, newRecipeStep1, newRecipeStep2)
+        }
+    }
 }

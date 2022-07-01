@@ -13,7 +13,9 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FavoriteFragment : Fragment() {
 
-    private val viewModel: RecipeViewModel by viewModels()
+    private val viewModel: RecipeViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

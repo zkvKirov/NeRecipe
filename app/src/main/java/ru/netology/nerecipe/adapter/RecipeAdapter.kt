@@ -1,11 +1,9 @@
 package ru.netology.nerecipe.adapter
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.PopupMenu
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -124,7 +122,20 @@ class RecipeCardViewHolder(
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.remove -> {
-                        listener.onRemoveClicked(card)
+                        val builder = AlertDialog.Builder(itemView.context)
+                        builder.setTitle("Удаление рецепта")
+                            .setIcon(R.drawable.ic_clear_24)
+                            .setMessage("Вы точно хотите удалить рецепт?")
+                            .setPositiveButton("OK") { _, _ ->
+                                listener.onRemoveClicked(card)
+                                Toast.makeText(itemView.context, "Рецепт был удалён", Toast.LENGTH_SHORT).show()
+                            }
+                            .setNegativeButton("Cancel") {dialog, _ ->
+                                dialog.cancel()
+                            }
+                        val alertDialog: AlertDialog = builder.create()
+                        alertDialog.setCancelable(false)
+                        alertDialog.show()
                         true
                     }
                     R.id.edit -> {

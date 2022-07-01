@@ -1,11 +1,9 @@
 package ru.netology.nerecipe.viewModel
 
-import android.app.AlertDialog
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeInteractionListener
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
@@ -70,23 +68,6 @@ class RecipeViewModel(
         repository.remove(card.id)
         Toast.makeText(getApplication(), "Recipe was deleted", Toast.LENGTH_SHORT).show()
     }
-
-//        override fun onRemoveClicked(card: RecipeCard) {
-//        val builder = AlertDialog.Builder(getApplication())
-//        builder.setTitle("Delete recipe")
-//            .setIcon(R.drawable.ic_clear_24)
-//            .setMessage("Are you really want delete recipe?")
-//            .setPositiveButton("OK") { _, _ ->
-//                repository.remove(card.id)
-//                Toast.makeText(getApplication(), "Recipe was deleted", Toast.LENGTH_SHORT).show()
-//            }
-//            .setNegativeButton("Cancel") {dialog, _ ->
-//                dialog.cancel()
-//            }
-//        val alertDialog: AlertDialog = builder.create()
-//        alertDialog.setCancelable(false)
-//        alertDialog.show()
-//    }
 
     override fun onEditClicked(card: RecipeCard) {
         navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category, card.step1, card.step2)
