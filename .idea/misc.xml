@@ -8,9 +8,11 @@
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/drawable/ic_add_24dp.xml" value="0.269" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/drawable/ic_favorite_24.xml" value="0.269" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/drawable/ic_favorite_border_24.xml" value="0.269" />
+        <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/drawable/ic_filter_menu_24.xml" value="0.298" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/drawable/ic_launcher_background.xml" value="0.269" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/drawable/ic_more_vert_24.xml" value="0.269" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/drawable/ic_ok_24dp.xml" value="0.298" />
+        <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/layout/checkboxes_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/layout/favorite_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/layout/full_recipe_card.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/layout/full_recipe_fragment.xml" value="0.365625" />
@@ -18,8 +20,10 @@
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/layout/recipe_card.xml" value="0.5" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/layout/recipe_content_fragment.xml" value="0.25" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/layout/recipe_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/menu/checkbox_card.xml" value="0.33" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/menu/option_card.xml" value="0.33" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/menu/option_post.xml" value="0.12222222222222222" />
+        <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/menu/top_app_bar.xml" value="0.365625" />
         <entry key="..\:/Users/Konstantin/AndroidStudioProjects/NeRecipe/app/src/main/res/xml/search.xml" value="0.36666666666666664" />
       </map>
     </option>

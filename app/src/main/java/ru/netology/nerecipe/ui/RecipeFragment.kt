@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeAdapter
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.RecipeFragmentBinding
@@ -38,6 +38,10 @@ class RecipeFragment : Fragment() {
         }
         viewModel.navigateToFullRecipeFragment.observe(this) {
             val direction = RecipeFragmentDirections.toFullRecipeFragment(it)
+            findNavController().navigate(direction)
+        }
+        viewModel.navigateToCheckboxFragment.observe(this) {
+            val direction = RecipeFragmentDirections.toCheckboxFragment()
             findNavController().navigate(direction)
         }
 
@@ -73,8 +77,23 @@ class RecipeFragment : Fragment() {
             viewModel.onFavoriteButtonClicked()
         }
 
+        binding.topAppBar.setOnClickListener {
+
+            when (it.id) {
+                R.id.search -> {
+
+                    true
+                }
+                R.id.filter -> {
+                    viewModel.onFilterButtonClicked() // не переходит на фрагмент с чекбоксами!
+                    true
+                }
+                else -> false
+            }
+        }
+
         // код для поиска
-//        binding.searchBar.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
+//        binding.search.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
 //            androidx.appcompat.widget.SearchView.OnQueryTextListener {
 //            override fun onQueryTextSubmit(query: String?): Boolean {
 //                return false
@@ -86,9 +105,11 @@ class RecipeFragment : Fragment() {
 //            }
 //        })
 
+        // код для drag&drop
         val callback = SimpleItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(binding.list)
+
     }.root
 
     override fun onResume() {
