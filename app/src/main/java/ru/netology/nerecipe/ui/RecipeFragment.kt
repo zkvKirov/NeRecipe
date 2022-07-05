@@ -26,8 +26,8 @@ class RecipeFragment : Fragment() {
 
     private var draft: RecipeCreateResult? = null
 
-    private lateinit var recipeCardslist: ArrayList<RecipeCard>
-    private lateinit var adapter: RecipeAdapter
+    lateinit var recipeCardslist: ArrayList<RecipeCard>
+    lateinit var adapter: RecipeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +57,6 @@ class RecipeFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = RecipeFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
         recipeCardslist = ArrayList()
-        //adapter = RecipeAdapter(viewModel, recipeCardslist)
         adapter = RecipeAdapter(viewModel)
         binding.list.adapter = adapter
 
@@ -122,7 +121,7 @@ class RecipeFragment : Fragment() {
             draft = RecipeCreateResult(newRecipeTitle, newRecipeAuthor, newRecipeCategory, newRecipeStep1, newRecipeStep2)
         }
     }
-//
+
 //    @Deprecated("Deprecated in Java")
 //    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 //
@@ -131,15 +130,17 @@ class RecipeFragment : Fragment() {
 //        val searchView: SearchView = searchItem.actionView as SearchView
 //        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
 //            android.widget.SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
 //                return false
 //            }
-//            override fun onQueryTextChange(msg: String): Boolean {
-//                filter(msg)
-//                return false
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                val userInput = newText?.lowercase()
+//                if (userInput != null) {
+//                    filter(userInput)
+//                }
+//                return true
 //            }
 //        })
-//        return
 //    }
 //
 //    private fun filter(text: String) {

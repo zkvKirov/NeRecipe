@@ -48,7 +48,6 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = FavoriteFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
         recipeCardslist = ArrayList()
-        //adapter = RecipeAdapter(viewModel, recipeCardslist)
         adapter = RecipeAdapter(viewModel)
         binding.listFavorite.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
@@ -84,7 +83,7 @@ class FavoriteFragment : Fragment() {
             viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
         }
     }
-//
+
 //    @Deprecated("Deprecated in Java")
 //    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 //
@@ -93,12 +92,15 @@ class FavoriteFragment : Fragment() {
 //        val searchView: SearchView = searchItem.actionView as SearchView
 //        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
 //            android.widget.SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
 //                return false
 //            }
-//            override fun onQueryTextChange(msg: String): Boolean {
-//                filter(msg)
-//                return false
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                val userInput = newText?.lowercase()
+//                if (userInput != null) {
+//                    filter(userInput)
+//                }
+//                return true
 //            }
 //        })
 //        return

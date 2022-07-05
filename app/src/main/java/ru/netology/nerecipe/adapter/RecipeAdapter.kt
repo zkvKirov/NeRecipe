@@ -15,9 +15,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class RecipeAdapter(
-    private val interactionListener: RecipeInteractionListener,
-    //private var recipeCardslist: ArrayList<RecipeCard>
+    private val interactionListener: RecipeInteractionListener
 ) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
+
+    private lateinit var recipeCardslist: ArrayList<RecipeCard>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -39,8 +40,6 @@ class RecipeAdapter(
 
     // код для drag & drop
 
-    private var recipeCardslist: ArrayList<RecipeCard> = ArrayList() // надо удалить, если раскомментировать код для поиска
-
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
@@ -56,10 +55,11 @@ class RecipeAdapter(
     }
 
     // код для поиска
-//    fun filterList(filterList: ArrayList<RecipeCard>) {
-//        recipeCardslist = filterList
-//        notifyDataSetChanged()
-//    }
+    fun filterList(filterList: ArrayList<RecipeCard>) {
+        recipeCardslist = ArrayList()
+        recipeCardslist.addAll(filterList)
+        notifyDataSetChanged()
+    }
 //
 //    override fun getItemCount(): Int {
 //        return recipeCardslist.size
