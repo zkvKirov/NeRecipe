@@ -15,18 +15,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class RecipeAdapter(
-    private val interactionListener: RecipeInteractionListener
-) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter, Filterable {
-
-    private var recipeCardslist: List<RecipeCard> = ArrayList() // сюда необходимо как-то передать актуальный список чтобы рецепты в нём можно было перетаскивать
-
-    private var recipelist: ArrayList<String> = ArrayList()  // сюда необходимо как-то передать актуальный список чтобы искать в нём
-
-    var recipeFilterList = ArrayList<String>()
-
-    init {
-        recipeFilterList = recipelist
-    }
+    private val interactionListener: RecipeInteractionListener,
+    //private var recipeCardslist: ArrayList<RecipeCard>
+) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -36,10 +27,6 @@ class RecipeAdapter(
 
     override fun onBindViewHolder(holder: RecipeCardViewHolder, position: Int) {
         holder.bind(getItem(position))
-        // код для поска - закомментировано чтобы не вылетало
-//        val selectCountryTextView =
-//            holder.itemView.findViewById<TextView>(com.google.android.material.R.id.select_dialog_listview)
-//        selectCountryTextView.text = recipeFilterList[position]
     }
 
     private object PostDiffCallback : DiffUtil.ItemCallback<RecipeCard>() {
@@ -52,9 +39,7 @@ class RecipeAdapter(
 
     // код для drag & drop
 
-//    override fun getItemCount(): Int {
-//        return recipeCardslist.size
-//    } // если расскомментировать метод, то при запуске приложения список рецептов отображается всегда будет пустой, даже если рецепты в списке по факту есть
+    private var recipeCardslist: ArrayList<RecipeCard> = ArrayList() // надо удалить, если раскомментировать код для поиска
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
@@ -71,41 +56,14 @@ class RecipeAdapter(
     }
 
     // код для поиска
+//    fun filterList(filterList: ArrayList<RecipeCard>) {
+//        recipeCardslist = filterList
+//        notifyDataSetChanged()
+//    }
+//
 //    override fun getItemCount(): Int {
-//        return recipeFilterList.size
-//    } // если расскомментировать метод, то при запуске приложения список рецептов всегда будет пустой,
-        // при этом операция добавления выполняется и рецепт в нужный список (который не видно на экране) добавляется
-        // а если закомментировать то приложение сразу вылетает, из-за того что размер списка не известен
-
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint.toString()
-                if (charSearch.isEmpty()) {
-                    recipeFilterList = recipelist
-                } else {
-                    val resultList = ArrayList<String>()
-                    for (row in recipelist) {
-                        if (row.lowercase(Locale.ROOT)
-                                .contains(charSearch.lowercase(Locale.ROOT))
-                        ) {
-                            resultList.add(row)
-                        }
-                    }
-                    recipeFilterList = resultList
-                }
-                val filterResults = FilterResults()
-                filterResults.values = recipeFilterList
-                return filterResults
-            }
-
-            @Suppress("UNCHECKED_CAST")
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                recipeFilterList = results?.values as ArrayList<String>
-                notifyDataSetChanged()
-            }
-        }
-    }
+//        return recipeCardslist.size
+//    }
 }
 
 

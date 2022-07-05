@@ -24,7 +24,7 @@ class RecipeViewModel(
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
-    val navigateToCheckboxFragment = SingleLiveEvent<Unit>()
+    //val navigateToCheckboxFragment = SingleLiveEvent<Unit>()
     val navigateToFullRecipeFragment = SingleLiveEvent<Int>()
     private val currentRecipe = MutableLiveData<RecipeCard?> (null)
 
@@ -40,9 +40,9 @@ class RecipeViewModel(
         navigateToRecipeFragment.call()
     }
 
-    fun onFilterButtonClicked() {
-        navigateToCheckboxFragment.call()
-    }
+//    fun onFilterButtonClicked() {
+//        navigateToCheckboxFragment.call()
+//    }
 
     fun onSaveButtonClicked(recipeCreateResult: RecipeCreateResult) {
         if (recipeCreateResult.equals(null)) return

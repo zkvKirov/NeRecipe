@@ -1,14 +1,16 @@
 package ru.netology.nerecipe.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeAdapter
+import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.FavoriteFragmentBinding
 import ru.netology.nerecipe.viewModel.RecipeViewModel
@@ -18,6 +20,9 @@ class FavoriteFragment : Fragment() {
     private val viewModel: RecipeViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
+
+    private lateinit var recipeCardslist: ArrayList<RecipeCard>
+    private lateinit var adapter: RecipeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +47,9 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FavoriteFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        val adapter = RecipeAdapter(viewModel)
+        recipeCardslist = ArrayList()
+        //adapter = RecipeAdapter(viewModel, recipeCardslist)
+        adapter = RecipeAdapter(viewModel)
         binding.listFavorite.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
             val favorite = recipes.filter { it.isFavorite }
@@ -54,7 +61,8 @@ class FavoriteFragment : Fragment() {
                 binding.listFavorite.visibility = View.VISIBLE
                 adapter.submitList(favorite)
             }
-
+            recipeCardslist.addAll(recipes)
+            adapter.notifyDataSetChanged()
         }
         binding.recipeButton.setOnClickListener {
             viewModel.onRecipeButtonClicked()
@@ -76,4 +84,37 @@ class FavoriteFragment : Fragment() {
             viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
         }
     }
+//
+//    @Deprecated("Deprecated in Java")
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//
+//        inflater.inflate(R.menu.top_app_bar, menu)
+//        val searchItem: MenuItem = menu.findItem(R.id.search)
+//        val searchView: SearchView = searchItem.actionView as SearchView
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+//            android.widget.SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//                return false
+//            }
+//            override fun onQueryTextChange(msg: String): Boolean {
+//                filter(msg)
+//                return false
+//            }
+//        })
+//        return
+//    }
+//
+//    private fun filter(text: String) {
+//        val filteredlist: ArrayList<RecipeCard> = ArrayList()
+//        for (item in recipeCardslist) {
+//            if (item.title?.lowercase()?.contains(text.lowercase()) == true) {
+//                filteredlist.add(item)
+//            }
+//        }
+//        if (filteredlist.isEmpty()) {
+//            Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
+//        } else {
+//            adapter.filterList(filteredlist)
+//        }
+//    }
 }
