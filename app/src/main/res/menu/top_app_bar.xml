@@ -5,14 +5,14 @@
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search_24"
-        android:title="поиск"
-        app:actionViewClass="android.widget.SearchView"
+        android:title="@string/search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/filter"
         android:icon="@drawable/ic_filter_menu_24"
-        android:title="фильтр"
+        android:title="@string/filter"
         app:showAsAction="ifRoom" />
 
 </menu>

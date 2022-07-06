@@ -20,49 +20,49 @@
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/checkbox_1"
             android:checked="true"
-            android:text="Европейская"/>
+            android:text="@string/europe"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/checkbox_2"
             app:layout_constraintTop_toBottomOf="@id/checkbox_1"
             android:checked="true"
-            android:text="Азиатская"/>
+            android:text="@string/asia"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/checkbox_3"
             app:layout_constraintTop_toBottomOf="@id/checkbox_2"
             android:checked="true"
-            android:text="Паназиатская"/>
+            android:text="@string/pan_asian"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/checkbox_4"
             app:layout_constraintTop_toBottomOf="@id/checkbox_3"
             android:checked="true"
-            android:text="Восточная"/>
+            android:text="@string/eastern"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/checkbox_5"
             app:layout_constraintTop_toBottomOf="@id/checkbox_4"
             android:checked="true"
-            android:text="Американская"/>
+            android:text="@string/american"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/checkbox_6"
             app:layout_constraintTop_toBottomOf="@id/checkbox_5"
             android:checked="true"
-            android:text="Русская"/>
+            android:text="@string/russian"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/checkbox_7"
             app:layout_constraintTop_toBottomOf="@id/checkbox_6"
             android:checked="true"
-            android:text="Средиземноморская"/>
+            android:text="@string/mediterranean"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

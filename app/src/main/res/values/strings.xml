@@ -6,8 +6,32 @@
     <string name="favorite">Favorite</string>
     <string name="newRecipe">Add new recipe</string>
     <string name="recipe_save">Save recipe</string>
-    <string name="text">Add step</string>
-    <string name="category">category</string>
-    <string name="author_name">author name</string>
-    <string name="title_of_recipe">title of recipe</string>
+    <string name="add_step_1">Add step 1 (must be fill)</string>
+    <string name="add_step">Add step</string>
+    <string name="category">Category (choose from 7)</string>
+    <string name="author_name">Author name (must be fill)</string>
+    <string name="title_of_recipe">Title of recipe (must be fill)</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="recipes">Recipes</string>
+    <string name="favorites">Favorites</string>
+    <string name="europe">Europe</string>
+    <string name="asia">Asia</string>
+    <string name="pan_asian">Pan-Asian</string>
+    <string name="eastern">Eastern</string>
+    <string name="american">American</string>
+    <string name="russian">Russian</string>
+    <string name="mediterranean">Mediterranean</string>
+    <string name="icon">icon</string>
+    <string name="empty_space">Empty space</string>
+
+    <string-array name="categories_array">
+        <item>Europe</item>
+        <item>Asia</item>
+        <item>Pan-Asian</item>
+        <item>Eastern</item>
+        <item>American</item>
+        <item>Russian</item>
+        <item>Mediterranean</item>
+    </string-array>
 </resources>

@@ -54,13 +54,6 @@ class RecipeAdapter(
         return true
     }
 
-    // код для поиска
-    fun filterList(filterList: ArrayList<RecipeCard>) {
-        recipeCardslist = ArrayList()
-        recipeCardslist.addAll(filterList)
-        notifyDataSetChanged()
-    }
-//
 //    override fun getItemCount(): Int {
 //        return recipeCardslist.size
 //    }

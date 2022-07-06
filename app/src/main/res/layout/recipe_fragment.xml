@@ -6,35 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="@string/app_name"
-            app:menu="@menu/top_app_bar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/empty_space_1"
-        android:background="@drawable/empty_state_1"/>
+        android:background="@drawable/empty_state_1"
+        android:contentDescription="@string/empty_space" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="600dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/appBar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/recipe_card" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -54,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:text="Рецепты"
+        android:text="@string/recipes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/barrier"
         app:layout_constraintStart_toStartOf="parent" />
@@ -65,7 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:text="Избранное"
+        android:text="@string/favorites"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:textAllCaps="false"

@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeAdapter
@@ -14,6 +17,7 @@ import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.FavoriteFragmentBinding
 import ru.netology.nerecipe.viewModel.RecipeViewModel
+import ru.netology.nmedia.util.SingleLiveEvent
 
 class FavoriteFragment : Fragment() {
 
@@ -60,8 +64,7 @@ class FavoriteFragment : Fragment() {
                 binding.listFavorite.visibility = View.VISIBLE
                 adapter.submitList(favorite)
             }
-            recipeCardslist.addAll(recipes)
-            adapter.notifyDataSetChanged()
+            recipeCardslist.addAll(favorite)
         }
         binding.recipeButton.setOnClickListener {
             viewModel.onRecipeButtonClicked()
@@ -80,43 +83,79 @@ class FavoriteFragment : Fragment() {
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
             val step1 = bundle[RecipeContentFragment.STEP1].toString()
             val step2 = bundle[RecipeContentFragment.STEP2].toString()
-            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
+            viewModel.onSaveButtonClicked(
+                RecipeCreateResult(
+                    newTitle,
+                    newAuthor,
+                    newCategory,
+                    step1,
+                    step2
+                )
+            )
         }
     }
 
-//    @Deprecated("Deprecated in Java")
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//
-//        inflater.inflate(R.menu.top_app_bar, menu)
-//        val searchItem: MenuItem = menu.findItem(R.id.search)
-//        val searchView: SearchView = searchItem.actionView as SearchView
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-//            android.widget.SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                val userInput = newText?.lowercase()
-//                if (userInput != null) {
-//                    filter(userInput)
-//                }
-//                return true
-//            }
-//        })
-//        return
-//    }
-//
-//    private fun filter(text: String) {
-//        val filteredlist: ArrayList<RecipeCard> = ArrayList()
-//        for (item in recipeCardslist) {
-//            if (item.title?.lowercase()?.contains(text.lowercase()) == true) {
-//                filteredlist.add(item)
-//            }
-//        }
-//        if (filteredlist.isEmpty()) {
-//            Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
-//        } else {
-//            adapter.filterList(filteredlist)
-//        }
-//    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.top_app_bar, menu)
+                val searchItem: MenuItem = menu.findItem(R.id.search)
+                val searchView: SearchView = searchItem.actionView as SearchView
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                    android.widget.SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        val userInput = newText?.lowercase()
+                        if (userInput != null) {
+                            filter(userInput)
+                        }
+                        return true
+                    }
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.search -> {
+
+                        true
+                    }
+                    R.id.filter -> {
+                        onFilterButtonClicked()
+                        true
+                    }
+                    else -> return false
+                }
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun filter(text: String) {
+        val filteredlist: ArrayList<RecipeCard> = ArrayList()
+        for (item in recipeCardslist) {
+            if (item.title.lowercase().contains(text.lowercase())) {
+                filteredlist.add(item)
+            }
+        }
+        if (filteredlist.isEmpty()) {
+            Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
+            filteredlist.clear()
+            adapter.submitList(filteredlist)
+        } else {
+            adapter.submitList(filteredlist)
+        }
+    }
+
+    private val navigateToCheckboxFragment = SingleLiveEvent<Unit>()
+
+    private fun onFilterButtonClicked() {
+        navigateToCheckboxFragment.call()
+    }
+
 }

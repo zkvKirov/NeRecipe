@@ -21,10 +21,9 @@ class RecipeViewModel(
     val data = repository.getAll()
     var recipeId by Delegates.notNull<Int>()
 
-    val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
+    val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
-    //val navigateToCheckboxFragment = SingleLiveEvent<Unit>()
     val navigateToFullRecipeFragment = SingleLiveEvent<Int>()
     private val currentRecipe = MutableLiveData<RecipeCard?> (null)
 
@@ -40,12 +39,13 @@ class RecipeViewModel(
         navigateToRecipeFragment.call()
     }
 
-//    fun onFilterButtonClicked() {
-//        navigateToCheckboxFragment.call()
-//    }
-
     fun onSaveButtonClicked(recipeCreateResult: RecipeCreateResult) {
-        if (recipeCreateResult.equals(null)) return
+        if (
+            recipeCreateResult.newTitle.isBlank() &&
+            recipeCreateResult.newAuthor.isBlank() &&
+            recipeCreateResult.newCategory.isBlank() &&
+            recipeCreateResult.newStep1.isBlank()
+                ) return
         val newRecipe = currentRecipe.value?.copy(
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
@@ -53,7 +53,7 @@ class RecipeViewModel(
             step1 = recipeCreateResult.newStep1,
             step2 = recipeCreateResult.newStep2
         ) ?: RecipeCard(
-            id =RecipeRepository.NEW_RECIPE_ID,
+            id = RecipeRepository.NEW_RECIPE_ID,
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
             category = recipeCreateResult.newCategory,
