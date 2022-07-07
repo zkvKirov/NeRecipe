@@ -28,9 +28,10 @@ class RecipeFragment : Fragment() {
     )
 
     private var draft: RecipeCreateResult? = null
-
+    private var checkboxes: ArrayList<String>? = null
     lateinit var recipeCardslist: ArrayList<RecipeCard>
     lateinit var adapter: RecipeAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,6 +138,13 @@ class RecipeFragment : Fragment() {
                 newRecipeStep2
             )
         }
+
+        setFragmentResultListener(
+            requestKey = CheckboxFragment.CHECKBOX_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != CheckboxFragment.CHECKBOX_KEY) return@setFragmentResultListener
+            checkboxes = arrayListOf(bundle[CheckboxFragment.CHECKBOX_KEY].toString())
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -156,7 +164,7 @@ class RecipeFragment : Fragment() {
                     override fun onQueryTextChange(newText: String?): Boolean {
                         val userInput = newText?.lowercase()
                         if (userInput != null) {
-                            filter(userInput)
+                            searchFilter(userInput)
                         }
                         return true
                     }
@@ -180,7 +188,7 @@ class RecipeFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun filter(text: String) {
+    private fun searchFilter(text: String) {
         val filteredlist: ArrayList<RecipeCard> = ArrayList()
         for (item in recipeCardslist) {
             if (item.title.lowercase().contains(text.lowercase())) {
@@ -200,5 +208,23 @@ class RecipeFragment : Fragment() {
 
     private fun onFilterButtonClicked() {
         navigateToCheckboxFragment.call()
+    }
+
+    // где в коде разместить вызов данной функции checkboxes?.let { filterFilter(it) } - чтобы он вызывалась для фильтрации списка рецептов?
+    private fun filterFilter(arrayList: ArrayList<String>) {
+        val filteredlist: ArrayList<RecipeCard> = ArrayList()
+        for (item in recipeCardslist) {
+            for (text in arrayList) {
+                if (item.category.lowercase().contains(text.lowercase()))
+                    filteredlist.add(item)
+            }
+            if (filteredlist.isEmpty()) {
+                Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
+                filteredlist.clear()
+                adapter.submitList(filteredlist)
+            } else {
+                adapter.submitList(filteredlist)
+            }
+        }
     }
 }

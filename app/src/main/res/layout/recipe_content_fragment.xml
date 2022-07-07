@@ -41,6 +41,17 @@
             android:inputType="text"
             app:layout_constraintTop_toBottomOf="@id/edit_author" />
 
+        <!--код для автозаполнения
+        <AutoCompleteTextView
+            android:id="@+id/autocomplete_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_spacing"
+            app:layout_constraintTop_toBottomOf="@id/edit_author"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="начни вводить категорию"/>-->
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edit_step1"
             android:layout_width="match_parent"

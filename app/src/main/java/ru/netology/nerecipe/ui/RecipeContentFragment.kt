@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
+import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.RecipeContentFragmentBinding
 
 class RecipeContentFragment : Fragment() {
@@ -30,9 +33,19 @@ class RecipeContentFragment : Fragment() {
         }
         choiceChips(binding)
 
+        // код для автозаполнения поля
+//        val textView = binding.autocompleteField as AutoCompleteTextView
+//        val categories: Array<out String> = resources.getStringArray(R.array.categories_array)
+//        context?.let {
+//            ArrayAdapter<String>(it, android.R.layout.simple_list_item_1, categories).also { adapter ->
+//                textView.setAdapter(adapter)
+//            }
+//        }
+
         binding.editTitle.setText(args.initialContent?.newTitle)
         binding.editAuthor.setText(args.initialContent?.newAuthor)
         binding.category.setText(args.initialContent?.newCategory)
+        //binding.autocompleteField.setText(args.initialContent?.newCategory)
         binding.editStep1.setText(args.initialContent?.newStep1)
         binding.editStep2.setText(args.initialContent?.newStep2)
         binding.editTitle.requestFocus(0)

@@ -18,8 +18,6 @@ class RecipeAdapter(
     private val interactionListener: RecipeInteractionListener
 ) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
 
-    private lateinit var recipeCardslist: ArrayList<RecipeCard>
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RecipeCardBinding.inflate(inflater, parent, false)
@@ -40,6 +38,9 @@ class RecipeAdapter(
 
     // код для drag & drop
 
+    // необходимо как-то инициализировать, иначе при попытке переатщить рецепт приложение вылетает
+    private lateinit var recipeCardslist: ArrayList<RecipeCard>
+
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
@@ -53,7 +54,7 @@ class RecipeAdapter(
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
-
+// если расскомментировать, то без инициализации recipeCardslist приложение не запускается, необходимо удалить и установить заново
 //    override fun getItemCount(): Int {
 //        return recipeCardslist.size
 //    }

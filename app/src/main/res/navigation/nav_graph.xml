@@ -65,6 +65,7 @@
     <fragment
         android:id="@+id/checkboxFragment"
         android:name="ru.netology.nerecipe.ui.CheckboxFragment"
-        tools:layout="@layout/checkboxes_fragment" />
+        tools:layout="@layout/checkboxes_fragment" >
+    </fragment>
 
 </navigation>
