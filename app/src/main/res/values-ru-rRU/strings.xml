@@ -9,9 +9,9 @@
     <string name="recipe_save">Сохранение рецепта</string>
     <string name="add_step_1">1 этап (обязательное поле)</string>
     <string name="add_step">этап</string>
-    <string name="category">Категория (выбери из списка)</string>
-    <string name="author_name">Имя автора (обязательное поле)</string>
-    <string name="title_of_recipe">Название рецепта (обязательное поле)</string>
+    <string name="category">Категория* (выбери из списка)</string>
+    <string name="author_name">Имя автора*</string>
+    <string name="title_of_recipe">Название рецепта*</string>
     <string name="search">Поиск</string>
     <string name="filter">Фильтр</string>
     <string name="recipes">Рецепты</string>
@@ -25,14 +25,7 @@
     <string name="mediterranean">Средиземноморская</string>
     <string name="icon">Иконка</string>
     <string name="empty_space">Заглушка</string>
+    <string name="required">"*обязательное поле"</string>
+    <string name="error">"Ошибка: поле должно быть заполнено"</string>
 
-    <string-array name="categories_array">
-        <item>Европейская</item>
-        <item>Азиатская</item>
-        <item>Паназиатская</item>
-        <item>Восточная</item>
-        <item>Американская</item>
-        <item>Русская</item>
-        <item>Средиземноморская</item>
-    </string-array>
 </resources>

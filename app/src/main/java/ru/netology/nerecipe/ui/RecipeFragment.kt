@@ -18,6 +18,7 @@ import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.RecipeFragmentBinding
 import ru.netology.nerecipe.helper.SimpleItemTouchHelperCallback
+import ru.netology.nerecipe.util.AndroidUtils
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 import ru.netology.nmedia.util.SingleLiveEvent
 
@@ -30,7 +31,7 @@ class RecipeFragment : Fragment() {
     private var draft: RecipeCreateResult? = null
     private var checkboxes: ArrayList<String>? = null
     lateinit var recipeCardslist: ArrayList<RecipeCard>
-    lateinit var adapter: RecipeAdapter
+    private lateinit var adapter: RecipeAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
