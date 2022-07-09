@@ -6,8 +6,7 @@
     <string name="favorite">Favorite</string>
     <string name="newRecipe">Add new recipe</string>
     <string name="recipe_save">Save recipe</string>
-    <string name="add_step_1">Add step 1 (must be fill)</string>
-    <string name="add_step">Add step</string>
+    <string name="add_step">Add step*</string>
     <string name="category">Category* (choose from list)</string>
     <string name="author_name">Author name*</string>
     <string name="title_of_recipe">Title of recipe*</string>

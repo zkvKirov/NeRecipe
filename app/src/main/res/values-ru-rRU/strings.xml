@@ -7,8 +7,7 @@
     <string name="favorite">Избранное</string>
     <string name="newRecipe">Добавить новый рецепт</string>
     <string name="recipe_save">Сохранение рецепта</string>
-    <string name="add_step_1">1 этап (обязательное поле)</string>
-    <string name="add_step">этап</string>
+    <string name="add_step">Этап*</string>
     <string name="category">Категория* (выбери из списка)</string>
     <string name="author_name">Имя автора*</string>
     <string name="title_of_recipe">Название рецепта*</string>

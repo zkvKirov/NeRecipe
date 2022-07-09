@@ -108,15 +108,13 @@ class RecipeFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val step1 = bundle[RecipeContentFragment.STEP1].toString()
-            val step2 = bundle[RecipeContentFragment.STEP2].toString()
+            val newSteps = bundle[RecipeContentFragment.STEP].toString()
             viewModel.onSaveButtonClicked(
                 RecipeCreateResult(
                     newTitle,
                     newAuthor,
                     newCategory,
-                    step1,
-                    step2
+                    newSteps
                 )
             )
             draft = null
@@ -129,14 +127,12 @@ class RecipeFragment : Fragment() {
             val newRecipeTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newRecipeAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newRecipeCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newRecipeStep1 = bundle[RecipeContentFragment.STEP1].toString()
-            val newRecipeStep2 = bundle[RecipeContentFragment.STEP2].toString()
+            val newRecipeSteps = bundle[RecipeContentFragment.STEP].toString()
             draft = RecipeCreateResult(
                 newRecipeTitle,
                 newRecipeAuthor,
                 newRecipeCategory,
-                newRecipeStep1,
-                newRecipeStep2
+                newRecipeSteps
             )
         }
 

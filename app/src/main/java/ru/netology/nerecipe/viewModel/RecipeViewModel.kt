@@ -44,21 +44,19 @@ class RecipeViewModel(
             recipeCreateResult.newTitle.isBlank() &&
             recipeCreateResult.newAuthor.isBlank() &&
             recipeCreateResult.newCategory.isBlank() &&
-            recipeCreateResult.newStep1.isBlank()
+            recipeCreateResult.newStep.isBlank()
                 ) return
         val newRecipe = currentRecipe.value?.copy(
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
             category = recipeCreateResult.newCategory,
-            step1 = recipeCreateResult.newStep1,
-            step2 = recipeCreateResult.newStep2
+            steps = recipeCreateResult.newStep
         ) ?: RecipeCard(
             id = RecipeRepository.NEW_RECIPE_ID,
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
             category = recipeCreateResult.newCategory,
-            step1 = recipeCreateResult.newStep1,
-            step2 = recipeCreateResult.newStep2
+            steps = recipeCreateResult.newStep
         )
         repository.save(newRecipe)
         Toast.makeText(getApplication(), "Успех", Toast.LENGTH_SHORT).show()
@@ -75,7 +73,7 @@ class RecipeViewModel(
     }
 
     override fun onEditClicked(card: RecipeCard) {
-        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category, card.step1, card.step2)
+        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category, card.steps)
         currentRecipe.value = card
     }
 

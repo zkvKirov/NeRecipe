@@ -81,15 +81,13 @@ class FavoriteFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val step1 = bundle[RecipeContentFragment.STEP1].toString()
-            val step2 = bundle[RecipeContentFragment.STEP2].toString()
+            val newSteps = bundle[RecipeContentFragment.STEP].toString()
             viewModel.onSaveButtonClicked(
                 RecipeCreateResult(
                     newTitle,
                     newAuthor,
                     newCategory,
-                    step1,
-                    step2
+                    newSteps
                 )
             )
         }

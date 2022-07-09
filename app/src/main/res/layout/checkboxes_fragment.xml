@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.9"
-        android:id="@+id/post_edit_window"
+        android:id="@+id/checkbox_set_window"
         android:gravity="start|top" >
 
         <CheckBox

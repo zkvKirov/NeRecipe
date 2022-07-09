@@ -84,8 +84,7 @@ class FileRecipeRepositoryImpl(
                 title = card.title,
                 author = card.author,
                 category = card.category,
-                step1 = card.step1,
-                step2 = card.step2
+                steps = card.steps
             )
         }
     }

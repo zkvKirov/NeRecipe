@@ -44,8 +44,7 @@ class FullRecipeFragment : Fragment() {
                 findNavController().navigateUp()
                 return@observe
             }
-            binding.fullRecipe.step1.visibility = View.VISIBLE
-            binding.fullRecipe.step2.visibility = View.VISIBLE
+            binding.fullRecipe.stepsList.visibility = View.VISIBLE
             viewHolder.bind(recipe)
         }
     }.root
@@ -60,9 +59,8 @@ class FullRecipeFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val step1 = bundle[RecipeContentFragment.STEP1].toString()
-            val step2 = bundle[RecipeContentFragment.STEP2].toString()
-            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, step1, step2))
+            val newSteps = bundle[RecipeContentFragment.STEP].toString()
+            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, newSteps))
         }
     }
 

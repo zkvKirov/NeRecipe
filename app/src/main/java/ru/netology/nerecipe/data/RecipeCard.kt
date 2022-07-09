@@ -9,10 +9,6 @@ data class RecipeCard(
     val author: String,
     val category: String,
     val isFavorite: Boolean = false,
-    val step1: String,
-    val step2: String?,
-//    val step3: String? = null,
-//    val step4: String? = null,
-//    val step5: String? = null,
-//    val step6: String? = null
+    //val steps: StepsCard
+    val steps: String
     )

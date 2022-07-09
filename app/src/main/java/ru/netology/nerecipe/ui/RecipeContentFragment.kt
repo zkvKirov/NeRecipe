@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.addCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputLayout
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.RecipeContentFragmentBinding
 import ru.netology.nerecipe.util.AndroidUtils
@@ -21,6 +22,10 @@ import ru.netology.nerecipe.util.AndroidUtils
 class RecipeContentFragment : Fragment() {
 
     private val args by navArgs<RecipeContentFragmentArgs>()
+
+    private lateinit var mLayout: ConstraintLayout
+    private lateinit var mEditText: TextInputLayout
+    private lateinit var mButton: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,8 +48,19 @@ class RecipeContentFragment : Fragment() {
             onOkButtonClicked(binding)
         }
 
+        // код для добавления поля edit text по нажатию на кнопке
+        mLayout = binding.recipeEditWindow
+        mEditText = binding.editStep
+        mButton = binding.fabStep
+        //mButton.setOnClickListener(onFabStepButtonClicked())
+        mButton.setOnClickListener {
+            val lParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+            lParams.addRule(RelativeLayout.BELOW, R.id.edit_step)
+            mLayout.addView(mEditText, lParams)
+        }
+
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val draft = Bundle(5)
+            val draft = Bundle(4)
             draft.putString(NEW_TITLE, binding.editTitle.editText?.text.toString())
             draft.putString(NEW_AUTHOR, binding.editAuthor.editText?.text.toString())
             draft.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
@@ -54,6 +70,19 @@ class RecipeContentFragment : Fragment() {
         }
 
     }.root
+
+    // код для добавления поля edit text по нажатию на кнопке
+//    private fun onFabStepButtonClicked(): View.OnClickListener? {//
+//        mLayout.addView(createNewTextView())
+//        return
+//    }
+
+//    private fun createNewTextView(): View {
+//        val lParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+//        val textView: TextView = TextView(context)
+//        textView.layoutParams = lParams
+//        return textView
+//    }
 
     private fun onOkButtonClicked(binding: RecipeContentFragmentBinding) {
         if (binding.editTitle.editText?.text.isNullOrBlank()) {
@@ -66,7 +95,7 @@ class RecipeContentFragment : Fragment() {
             binding.editTitle.error = null
             binding.authorTextField.error = null
             binding.category.error = null
-            val resultBundle = Bundle(5)
+            val resultBundle = Bundle(4)
             resultBundle.putString(NEW_TITLE, binding.editTitle.editText?.text.toString())
             resultBundle.putString(NEW_AUTHOR, binding.editAuthor.editText?.text.toString())
             resultBundle.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
@@ -82,8 +111,7 @@ class RecipeContentFragment : Fragment() {
         const val NEW_TITLE = "newTitle"
         const val NEW_AUTHOR = "newAuthor"
         const val NEW_CATEGORY = "newCategory"
-        const val STEP1 = "step1"
-        const val STEP2 = "step2"
+        const val STEP = "step"
     }
 
 }

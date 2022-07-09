@@ -119,8 +119,7 @@ class RecipeCardViewHolder(
             authorName.text = card.author
             category.text = card.category
             favorite.isChecked = card.isFavorite
-            step1.text = card.step1
-            step2.text = card.step2
+            //stepsList. = card.steps
         }
     }
 
