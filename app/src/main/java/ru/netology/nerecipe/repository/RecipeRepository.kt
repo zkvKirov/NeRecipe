@@ -5,6 +5,8 @@ import ru.netology.nerecipe.data.RecipeCard
 
 interface RecipeRepository {
 
+    //val data: LiveData<List<RecipeCard>>
+
     fun getAll(): LiveData<List<RecipeCard>>
     fun addFavorite(recipeId: Int)
     fun remove(recipeId: Int)

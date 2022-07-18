@@ -60,7 +60,7 @@ class FullRecipeFragment : Fragment() {
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
             val newSteps = bundle[RecipeContentFragment.STEP].toString()
-            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, newSteps))
+            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory))
         }
     }
 

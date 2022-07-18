@@ -17,12 +17,15 @@ class CheckboxFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = CheckboxesFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        binding.choice.setOnClickListener {
+
+            binding.choice.setOnClickListener {
             onChoiceButtonClicked(binding)
         }
     }.root
 
     private fun onChoiceButtonClicked(binding: CheckboxesFragmentBinding) {
+
+        //if (binding.checkbox1.isChecked) checkboxes.add(binding.checkbox1.text.toString()) else binding.checkbox1.isChecked = false
         if (binding.checkbox1.isChecked) checkboxes.add(binding.checkbox1.text.toString())
         if (binding.checkbox2.isChecked) checkboxes.add(binding.checkbox2.text.toString())
         if (binding.checkbox3.isChecked) checkboxes.add(binding.checkbox3.text.toString())
@@ -33,7 +36,7 @@ class CheckboxFragment : Fragment() {
 
         if (checkboxes.isNotEmpty()) {
             val resultBundle = Bundle(1)
-            resultBundle.putStringArrayList(CHECKBOX_KEY, checkboxes)
+            resultBundle.putString(CHECKBOX_KEY, checkboxes.toString())
             setFragmentResult(CHECKBOX_KEY, resultBundle)
         }
         findNavController().popBackStack()

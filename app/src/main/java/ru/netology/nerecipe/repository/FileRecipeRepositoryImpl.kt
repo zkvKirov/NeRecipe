@@ -22,6 +22,7 @@ class FileRecipeRepositoryImpl(
     )
 
     private val data: MutableLiveData<List<RecipeCard>>
+    //override val data: MutableLiveData<List<RecipeCard>>
 
     init {
         val recipesFile = application.filesDir.resolve(FILE_NAME)
@@ -83,15 +84,14 @@ class FileRecipeRepositoryImpl(
             if (it.id != card.id) it else it.copy(
                 title = card.title,
                 author = card.author,
-                category = card.category,
-                steps = card.steps
+                category = card.category
             )
         }
     }
 
     companion object {
         const val NEXT_ID_PREFS_KEY = "nextId"
-        const val FILE_NAME = "posts.json"
+        const val FILE_NAME = "recipes.json"
     }
 
 }

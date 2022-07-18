@@ -11,11 +11,13 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeAdapter
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.FavoriteFragmentBinding
+import ru.netology.nerecipe.helper.SimpleItemTouchHelperCallback
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 import ru.netology.nmedia.util.SingleLiveEvent
 
@@ -25,7 +27,8 @@ class FavoriteFragment : Fragment() {
         ownerProducer = ::requireParentFragment
     )
 
-    private lateinit var recipeCardslist: ArrayList<RecipeCard>
+    private var recipeCardsList: ArrayList<RecipeCard> = ArrayList()
+    private var checkboxes: MutableList<String> = ArrayList()
     private lateinit var adapter: RecipeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +47,10 @@ class FavoriteFragment : Fragment() {
             val direction = FavoriteFragmentDirections.toFullRecipeFragment(it)
             findNavController().navigate(direction)
         }
+        navigateToCheckboxFragment.observe(this) {
+            val direction = FavoriteFragmentDirections.toCheckboxFragment()
+            findNavController().navigate(direction)
+        }
     }
 
     override fun onCreateView(
@@ -51,8 +58,8 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FavoriteFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        recipeCardslist = ArrayList()
-        adapter = RecipeAdapter(viewModel)
+        recipeCardsList = ArrayList()
+        adapter = RecipeAdapter(viewModel, recipeCardsList)
         binding.listFavorite.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
             val favorite = recipes.filter { it.isFavorite }
@@ -64,15 +71,47 @@ class FavoriteFragment : Fragment() {
                 binding.listFavorite.visibility = View.VISIBLE
                 adapter.submitList(favorite)
             }
-            recipeCardslist.addAll(favorite)
+            recipeCardsList.addAll(favorite)
         }
         binding.recipeButton.setOnClickListener {
             viewModel.onRecipeButtonClicked()
         }
+
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(binding.listFavorite)
+
     }.root
 
     override fun onResume() {
         super.onResume()
+
+        setFragmentResultListener(
+            requestKey = CheckboxFragment.CHECKBOX_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != CheckboxFragment.CHECKBOX_KEY) return@setFragmentResultListener
+            val line = bundle[CheckboxFragment.CHECKBOX_KEY].toString()
+            var word: String
+            if (line.contains(",")) checkboxes = line.split(", ") as MutableList<String> else checkboxes.add(line)
+            if (checkboxes.size == 1) {
+                word = checkboxes[0].substring(1)
+                word = word.substring(0, word.length-1)
+                checkboxes[0] = word
+            } else {
+                checkboxes.forEachIndexed { index, it ->
+                    if(it.contains('[')) {
+                        word = it.substring(1)
+                        checkboxes[index] = word
+                    }
+                    if(it.contains(']')) {
+                        word = it.substring(0, it.length-1)
+                        checkboxes[index] = word
+                    }
+                }
+            }
+            filterFilter(checkboxes)
+            checkboxes.clear()
+        }
 
         setFragmentResultListener(
             requestKey = RecipeContentFragment.REQUEST_KEY
@@ -86,8 +125,7 @@ class FavoriteFragment : Fragment() {
                 RecipeCreateResult(
                     newTitle,
                     newAuthor,
-                    newCategory,
-                    newSteps
+                    newCategory
                 )
             )
         }
@@ -135,18 +173,18 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun filter(text: String) {
-        val filteredlist: ArrayList<RecipeCard> = ArrayList()
-        for (item in recipeCardslist) {
+        val filteredList: ArrayList<RecipeCard> = ArrayList()
+        for (item in recipeCardsList) {
             if (item.title.lowercase().contains(text.lowercase())) {
-                filteredlist.add(item)
+                filteredList.add(item)
             }
         }
-        if (filteredlist.isEmpty()) {
+        if (filteredList.isEmpty()) {
             Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
-            filteredlist.clear()
-            adapter.submitList(filteredlist)
+            filteredList.clear()
+            adapter.submitList(filteredList)
         } else {
-            adapter.submitList(filteredlist)
+            adapter.submitList(filteredList)
         }
     }
 
@@ -154,6 +192,23 @@ class FavoriteFragment : Fragment() {
 
     private fun onFilterButtonClicked() {
         navigateToCheckboxFragment.call()
+    }
+
+    private fun filterFilter(arrayList: List<String>) {
+        val filteredList: ArrayList<RecipeCard> = ArrayList()
+        for (item in recipeCardsList) {
+            for (text in arrayList) {
+                if (item.category.lowercase() == text.lowercase())
+                    filteredList.add(item)
+            }
+        }
+        if (filteredList.isEmpty()) {
+            Toast.makeText(context, "No Found...", Toast.LENGTH_SHORT).show()
+            filteredList.clear()
+            adapter.submitList(filteredList)
+        } else {
+            adapter.submitList(filteredList)
+        }
     }
 
 }

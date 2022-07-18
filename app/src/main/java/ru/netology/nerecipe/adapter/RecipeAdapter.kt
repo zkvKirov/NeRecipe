@@ -11,11 +11,13 @@ import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.databinding.RecipeCardBinding
 import ru.netology.nerecipe.helper.ItemTouchHelperAdapter
+import ru.netology.nerecipe.ui.RecipeFragment
 import java.util.*
 import kotlin.collections.ArrayList
 
 class RecipeAdapter(
-    private val interactionListener: RecipeInteractionListener
+    private val interactionListener: RecipeInteractionListener,
+    private var recipeCardsList: ArrayList<RecipeCard>
 ) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
@@ -36,28 +38,19 @@ class RecipeAdapter(
             oldItem == newItem
     }
 
-    // код для drag & drop
-
-    // необходимо как-то инициализировать, иначе при попытке переатщить рецепт приложение вылетает
-    private lateinit var recipeCardslist: ArrayList<RecipeCard>
-
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(recipeCardslist, i, i + 1)
+                Collections.swap(recipeCardsList, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(recipeCardslist, i, i - 1)
+                Collections.swap(recipeCardsList, i, i - 1)
             }
         }
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
-// если расскомментировать, то без инициализации recipeCardslist приложение не запускается, необходимо удалить и установить заново
-//    override fun getItemCount(): Int {
-//        return recipeCardslist.size
-//    }
 }
 
 

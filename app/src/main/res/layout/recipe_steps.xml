@@ -10,14 +10,15 @@
         android:id="@+id/picture"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:scaleType="center"
-        tools:src="@drawable/ic_launcher_foreground"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:background="@drawable/ic_launcher_foreground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/icon" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/step"
+        android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_spacing"
@@ -25,7 +26,17 @@
         app:layout_constraintTop_toTopOf="@id/picture"
         app:layout_constraintBottom_toBottomOf="@id/picture"
         app:layout_constraintStart_toEndOf="@id/picture"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="menu"
         tools:text="этап приготовления" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_more_vert_24"
+        android:contentDescription="@string/menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,8 +8,5 @@ import kotlinx.parcelize.RawValue
 class RecipeCreateResult (
     val newTitle: String,
     val newAuthor: String,
-    val newCategory: String,
-//    @RawValue
-//    val newStep: StepsCard
-    val newStep: String
+    val newCategory: String
 ) : Parcelable

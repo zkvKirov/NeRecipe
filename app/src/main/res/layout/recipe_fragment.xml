@@ -14,7 +14,7 @@
         android:contentDescription="@string/empty_space" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        android:id="@+id/listOfRecipes"
         android:layout_width="match_parent"
         android:layout_height="600dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

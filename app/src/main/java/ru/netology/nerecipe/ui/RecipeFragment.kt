@@ -18,9 +18,9 @@ import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.RecipeFragmentBinding
 import ru.netology.nerecipe.helper.SimpleItemTouchHelperCallback
-import ru.netology.nerecipe.util.AndroidUtils
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 import ru.netology.nmedia.util.SingleLiveEvent
+import kotlin.collections.ArrayList
 
 class RecipeFragment : Fragment() {
 
@@ -29,10 +29,10 @@ class RecipeFragment : Fragment() {
     )
 
     private var draft: RecipeCreateResult? = null
-    private var checkboxes: ArrayList<String>? = null
-    lateinit var recipeCardslist: ArrayList<RecipeCard>
+    private var checkboxes: MutableList<String> = ArrayList()
+    private var recipeCardsList: ArrayList<RecipeCard> = ArrayList()
+    private val filteredList: ArrayList<RecipeCard> = ArrayList()
     private lateinit var adapter: RecipeAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,27 +61,34 @@ class RecipeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = RecipeFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        recipeCardslist = ArrayList()
-        adapter = RecipeAdapter(viewModel)
-        binding.list.adapter = adapter
+        adapter = RecipeAdapter(viewModel, recipeCardsList)
+        binding.listOfRecipes.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            if (recipes.isEmpty()) {
-                binding.list.visibility = View.GONE
-                binding.emptySpace1.visibility = View.VISIBLE
-            } else {
+            if (filteredList.isNotEmpty()) {
                 binding.emptySpace1.visibility = View.GONE
-                binding.list.visibility = View.VISIBLE
-                adapter.submitList(recipes) {
-                    val newRecipe = recipes.size > adapter.itemCount
-                    if (newRecipe) {
-                        binding.list.smoothScrollToPosition(0)
+                binding.listOfRecipes.visibility = View.VISIBLE
+                adapter.submitList(filteredList)
+                recipeCardsList.addAll(filteredList)
+            } else {
+                if (recipes.isEmpty()) {
+                    binding.listOfRecipes.visibility = View.GONE
+                    binding.emptySpace1.visibility = View.VISIBLE
+                } else {
+                    binding.emptySpace1.visibility = View.GONE
+                    binding.listOfRecipes.visibility = View.VISIBLE
+                    adapter.submitList(recipes) {
+                        val newRecipe = recipes.size > adapter.itemCount
+                        if (newRecipe) {
+                            binding.listOfRecipes.smoothScrollToPosition(0)
+                        }
                     }
                 }
+                recipeCardsList.addAll(recipes)
             }
-            recipeCardslist.addAll(recipes)
-            //adapter.notifyDataSetChanged()
         }
+
+        filteredList.clear()
 
         binding.fab.setOnClickListener {
             viewModel.onAddButtonClicked(draft)
@@ -94,12 +101,39 @@ class RecipeFragment : Fragment() {
         // код для drag&drop
         val callback = SimpleItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(binding.list)
+        touchHelper.attachToRecyclerView(binding.listOfRecipes)
 
     }.root
 
     override fun onResume() {
         super.onResume()
+
+        setFragmentResultListener(
+            requestKey = CheckboxFragment.CHECKBOX_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != CheckboxFragment.CHECKBOX_KEY) return@setFragmentResultListener
+            val line = bundle[CheckboxFragment.CHECKBOX_KEY].toString()
+            var word: String
+            if (line.contains(",")) checkboxes = line.split(", ") as MutableList<String> else checkboxes.add(line)
+            if (checkboxes.size == 1) {
+                word = checkboxes[0].substring(1)
+                word = word.substring(0, word.length-1)
+                checkboxes[0] = word
+            } else {
+                checkboxes.forEachIndexed { index, it ->
+                    if(it.contains('[')) {
+                        word = it.substring(1)
+                        checkboxes[index] = word
+                    }
+                    if(it.contains(']')) {
+                        word = it.substring(0, it.length-1)
+                        checkboxes[index] = word
+                    }
+                }
+            }
+            filterFilter(checkboxes)
+            checkboxes.clear()
+        }
 
         setFragmentResultListener(
             requestKey = RecipeContentFragment.REQUEST_KEY
@@ -113,8 +147,7 @@ class RecipeFragment : Fragment() {
                 RecipeCreateResult(
                     newTitle,
                     newAuthor,
-                    newCategory,
-                    newSteps
+                    newCategory
                 )
             )
             draft = null
@@ -131,16 +164,8 @@ class RecipeFragment : Fragment() {
             draft = RecipeCreateResult(
                 newRecipeTitle,
                 newRecipeAuthor,
-                newRecipeCategory,
-                newRecipeSteps
+                newRecipeCategory
             )
-        }
-
-        setFragmentResultListener(
-            requestKey = CheckboxFragment.CHECKBOX_KEY
-        ) { requestKey, bundle ->
-            if (requestKey != CheckboxFragment.CHECKBOX_KEY) return@setFragmentResultListener
-            checkboxes = arrayListOf(bundle[CheckboxFragment.CHECKBOX_KEY].toString())
         }
     }
 
@@ -171,7 +196,6 @@ class RecipeFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.search -> {
-
                         true
                     }
                     R.id.filter -> {
@@ -186,18 +210,18 @@ class RecipeFragment : Fragment() {
     }
 
     private fun searchFilter(text: String) {
-        val filteredlist: ArrayList<RecipeCard> = ArrayList()
-        for (item in recipeCardslist) {
+        val searchList: ArrayList<RecipeCard> = ArrayList()
+        for (item in recipeCardsList) {
             if (item.title.lowercase().contains(text.lowercase())) {
-                filteredlist.add(item)
+                searchList.add(item)
             }
         }
-        if (filteredlist.isEmpty()) {
+        if (searchList.isEmpty()) {
             Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
-            filteredlist.clear()
-            adapter.submitList(filteredlist)
+            searchList.clear()
+            adapter.submitList(searchList)
         } else {
-            adapter.submitList(filteredlist)
+            adapter.submitList(searchList)
         }
     }
 
@@ -207,21 +231,21 @@ class RecipeFragment : Fragment() {
         navigateToCheckboxFragment.call()
     }
 
-    // где в коде разместить вызов данной функции checkboxes?.let { filterFilter(it) } - чтобы он вызывалась для фильтрации списка рецептов?
-    private fun filterFilter(arrayList: ArrayList<String>) {
-        val filteredlist: ArrayList<RecipeCard> = ArrayList()
-        for (item in recipeCardslist) {
+    private fun filterFilter(arrayList: List<String>) : ArrayList<RecipeCard> {
+        //val filteredList: ArrayList<RecipeCard> = ArrayList()
+        for (item in recipeCardsList) {
             for (text in arrayList) {
-                if (item.category.lowercase().contains(text.lowercase()))
-                    filteredlist.add(item)
-            }
-            if (filteredlist.isEmpty()) {
-                Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
-                filteredlist.clear()
-                adapter.submitList(filteredlist)
-            } else {
-                adapter.submitList(filteredlist)
+                if (item.category.lowercase() == text.lowercase())
+                    filteredList.add(item)
             }
         }
+        if (filteredList.isEmpty()) {
+            Toast.makeText(context, "No Found...", Toast.LENGTH_SHORT).show()
+            filteredList.clear()
+            adapter.submitList(filteredList)
+        } else {
+            adapter.submitList(filteredList)
+        }
+        return filteredList
     }
 }
