@@ -14,9 +14,9 @@ internal class RecipeViewModelTest {
     fun onSaveButtonClicked_newRecipe() {
         //arrange
         val viewModel = RecipeViewModel(application = Application())
-        val expectedRecipeCard = RecipeCard(id = 0, title = "салат", author = "Я", category = "Азия", isFavorite = false, step1 = "1 этап", step2 = null)
+        val expectedRecipeCard = RecipeCard(id = 0, title = "салат", author = "Я", category = "Азия", isFavorite = false)
         //act
-        val actualRecipeCard = viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle = "салат", newAuthor = "Я", newCategory = "Азия", newStep1 = "1 этап", newStep2 = null))
+        val actualRecipeCard = viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle = "салат", newAuthor = "Я", newCategory = "Азия"))
         //assert
         assertEquals(expectedRecipeCard, actualRecipeCard)
     }
