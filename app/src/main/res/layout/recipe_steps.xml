@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="@id/picture"
         app:layout_constraintBottom_toBottomOf="@id/picture"
         app:layout_constraintStart_toEndOf="@id/picture"
-        app:layout_constraintEnd_toStartOf="menu"
+        app:layout_constraintEnd_toStartOf="@+id/menu"
         tools:text="этап приготовления" />
 
     <androidx.appcompat.widget.AppCompatImageButton
