@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipeInteractionListener
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
+import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.repository.FileRecipeRepositoryImpl
 import ru.netology.nerecipe.repository.RecipeRepository
 import ru.netology.nmedia.util.SingleLiveEvent
@@ -21,6 +22,10 @@ class RecipeViewModel(
     //val data by repository::data
     val data = repository.getAll()
     var recipeId by Delegates.notNull<Int>()
+
+    val stepsData: MutableLiveData<StepsCard> by lazy {
+        MutableLiveData<StepsCard>()
+    }
 
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
@@ -79,4 +84,6 @@ class RecipeViewModel(
         navigateToFullRecipeFragment.value = card.id
         recipeId = card.id
     }
+
+
 }

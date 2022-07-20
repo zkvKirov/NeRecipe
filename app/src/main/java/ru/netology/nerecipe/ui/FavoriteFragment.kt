@@ -35,7 +35,7 @@ class FavoriteFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.navigateToRecipeContentScreenEvent.observe(this) {
-            val direction = FavoriteFragmentDirections.toRecipeContentFragment(it)
+            val direction = FavoriteFragmentDirections.toRecipeContentFragment()
             findNavController().navigate(direction)
         }
 

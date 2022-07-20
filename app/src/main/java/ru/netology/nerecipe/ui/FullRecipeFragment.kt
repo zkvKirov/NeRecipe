@@ -26,7 +26,7 @@ class FullRecipeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.navigateToRecipeContentScreenEvent.observe(this) {
-            val direction = FullRecipeFragmentDirections.toRecipeContentFragment(it)
+            val direction = FullRecipeFragmentDirections.toRecipeContentFragment()
             findNavController().navigate(direction)
         }
     }

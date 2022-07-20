@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -38,8 +39,10 @@ class RecipeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.navigateToRecipeContentScreenEvent.observe(this) {
-            val direction = RecipeFragmentDirections.toRecipeContentFragment(it)
-            findNavController().navigate(direction)
+            parentFragmentManager.commit {
+                replace(R.id.nav_host_fragment, RecipeContentFragment(it))
+                addToBackStack(null)
+            }
         }
 
         viewModel.navigateToFavoriteFragment.observe(this) {

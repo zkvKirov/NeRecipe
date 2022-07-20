@@ -16,12 +16,15 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import ru.netology.nerecipe.R
+import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.databinding.RecipeContentFragmentBinding
 import ru.netology.nerecipe.util.AndroidUtils
 
-class RecipeContentFragment : Fragment() {
+class RecipeContentFragment(
+    private val initialContent: RecipeCreateResult?
+) : Fragment() {
 
-    private val args by navArgs<RecipeContentFragmentArgs>()
+    //private val args by navArgs<RecipeContentFragmentArgs>()
 
       // код для добавления поля edit text по нажатию на кнопке
 //    private lateinit var mLayout: ConstraintLayout
@@ -39,9 +42,9 @@ class RecipeContentFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
         (binding.category.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-        binding.editTitle.editText?.setText(args.recipeInitialContent?.newTitle).toString()
-        binding.editAuthor.editText?.setText(args.recipeInitialContent?.newAuthor).toString()
-        binding.category.editText?.setText(args.recipeInitialContent?.newCategory).toString()
+        binding.editTitle.editText?.setText(initialContent?.newTitle)
+        binding.editAuthor.editText?.setText(initialContent?.newAuthor)
+        binding.category.editText?.setText(initialContent?.newCategory)
 
         binding.editTitle.requestFocus(0)
 
@@ -71,7 +74,8 @@ class RecipeContentFragment : Fragment() {
             draft.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
             setFragmentResult(DRAFT_KEY, draft)
             Toast.makeText(context, "черновик рецепта сохранён", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            parentFragmentManager.popBackStack()
+            //findNavController().popBackStack()
         }
 
     }.root
@@ -107,7 +111,8 @@ class RecipeContentFragment : Fragment() {
             resultBundle.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
             //resultBundle.putParcelableArrayList()
             setFragmentResult(REQUEST_KEY, resultBundle)
-            findNavController().popBackStack()
+            parentFragmentManager.popBackStack()
+            //findNavController().popBackStack()
         }
         AndroidUtils.hideKeyboard(binding.root)
     }

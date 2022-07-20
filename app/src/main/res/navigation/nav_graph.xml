@@ -27,10 +27,10 @@
         android:id="@+id/recipeContentFragment"
         android:name="ru.netology.nerecipe.ui.RecipeContentFragment"
         tools:layout="@layout/recipe_content_fragment" >
-        <argument
+        <!--<argument
             android:name="recipeInitialContent"
             app:argType="ru.netology.nerecipe.data.RecipeCreateResult"
-            app:nullable="true" />
+            app:nullable="true" />-->
         <!--<argument
             android:name="StepsInitialContent"
             app:argType="ru.netology.nerecipe.data.StepsCreateResult"
