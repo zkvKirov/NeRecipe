@@ -15,6 +15,6 @@ data class RecipeCard(
     val category: String,
     @SerializedName("isFavorite")
     val isFavorite: Boolean = false,
-//    @SerializedName("stepsCard")
-//    val stepsCard: ArrayList<StepsCard>
+    @SerializedName("stepsCard")
+    val stepsCard: ArrayList<StepsCard>?
     )

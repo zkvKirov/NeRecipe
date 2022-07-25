@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 class StepsCard(
     @SerializedName("id")
     val id: Int = 0,
-    @SerializedName("picture")
-    val picture: String? = null,
     @SerializedName("content")
-    val content: String
+    val content: String,
+    @SerializedName("picture")
+    val picture: String? = null
 )

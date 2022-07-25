@@ -17,6 +17,7 @@ import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeAdapter
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
+import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.databinding.RecipeFragmentBinding
 import ru.netology.nerecipe.helper.SimpleItemTouchHelperCallback
 import ru.netology.nerecipe.viewModel.RecipeViewModel
@@ -145,12 +146,13 @@ class RecipeFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newSteps = bundle[RecipeContentFragment.STEP].toString()
+            val newSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
             viewModel.onSaveButtonClicked(
                 RecipeCreateResult(
                     newTitle,
                     newAuthor,
-                    newCategory
+                    newCategory,
+                    newSteps
                 )
             )
             draft = null
@@ -163,11 +165,12 @@ class RecipeFragment : Fragment() {
             val newRecipeTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newRecipeAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newRecipeCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newRecipeSteps = bundle[RecipeContentFragment.STEP].toString()
+            val newRecipeSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
             draft = RecipeCreateResult(
                 newRecipeTitle,
                 newRecipeAuthor,
-                newRecipeCategory
+                newRecipeCategory,
+                newRecipeSteps
             )
         }
     }

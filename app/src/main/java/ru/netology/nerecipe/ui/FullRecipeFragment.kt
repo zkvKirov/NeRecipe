@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.nerecipe.adapter.RecipeCardViewHolder
+import ru.netology.nerecipe.adapter.StepAdapter
 import ru.netology.nerecipe.data.RecipeCreateResult
+import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.databinding.FullRecipeFragmentBinding
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
@@ -21,6 +23,9 @@ class FullRecipeFragment : Fragment() {
     )
 
     private val args by navArgs<FullRecipeFragmentArgs>()
+
+    private lateinit var adapter: StepAdapter
+    private var stepsList: ArrayList<StepsCard> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,15 +41,18 @@ class FullRecipeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FullRecipeFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
+        adapter = StepAdapter(viewModel, stepsList)
+        binding.fullRecipe.stepsList.adapter = adapter
         val viewHolder = RecipeCardViewHolder(binding.fullRecipe, viewModel)
+
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
+            binding.fullRecipe.stepsList.visibility = View.VISIBLE
             val recipe = recipes.find {
                 it.id == args.recipeId
             } ?: run {
                 findNavController().navigateUp()
                 return@observe
             }
-            binding.fullRecipe.stepsList.visibility = View.VISIBLE
             viewHolder.bind(recipe)
         }
     }.root
@@ -59,8 +67,8 @@ class FullRecipeFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newSteps = bundle[RecipeContentFragment.STEP].toString()
-            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory))
+            val newSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+            viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, newSteps))
         }
     }
 

@@ -2,27 +2,29 @@ package ru.netology.nerecipe.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.addCallback
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.google.android.material.chip.Chip
+import androidx.fragment.app.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.RecipeCreateResult
+import ru.netology.nerecipe.data.StepCreateResult
+import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.databinding.RecipeContentFragmentBinding
 import ru.netology.nerecipe.util.AndroidUtils
+import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class RecipeContentFragment(
     private val initialContent: RecipeCreateResult?
 ) : Fragment() {
+
+    private val viewModel: RecipeViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
+    private var draftStep: StepCreateResult? = null
+    private var stepsData: ArrayList<StepsCard> = ArrayList()
 
     //private val args by navArgs<RecipeContentFragmentArgs>()
 
@@ -30,6 +32,17 @@ class RecipeContentFragment(
 //    private lateinit var mLayout: ConstraintLayout
 //    private lateinit var mEditText: TextInputLayout
 //    private lateinit var mButton: FloatingActionButton
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.navigateToStepContentScreenEvent.observe(this) {
+            parentFragmentManager.commit {
+                replace(R.id.nav_host_fragment, StepContentFragment(it))
+                addToBackStack(null)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +66,7 @@ class RecipeContentFragment(
         }
 
         binding.fabStep.setOnClickListener {
-            onFabStepButtonClicked(binding)
+            viewModel.onAddStepClicked(draftStep)
         }
 
         // код для добавления поля edit text по нажатию на кнопке
@@ -79,6 +92,24 @@ class RecipeContentFragment(
         }
 
     }.root
+
+    override fun onResume() {
+        super.onResume()
+
+        setFragmentResultListener(
+            requestKey = StepContentFragment.REQUEST_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != StepContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            val newContent = bundle[StepContentFragment.NEW_CONTENT].toString()
+            val newPicture = bundle[StepContentFragment.NEW_PICTURE].toString()
+            stepsData = viewModel.onSaveStepButtonClicked(
+                StepCreateResult(
+                    newContent,
+                    newPicture
+                )
+            )
+        }
+    }
 
     // код для добавления поля edit text по нажатию на кнопке (2 вариант)
 //    private fun onFabStepButtonClicked(): View.OnClickListener? {//
@@ -109,20 +140,12 @@ class RecipeContentFragment(
             resultBundle.putString(NEW_TITLE, binding.editTitle.editText?.text.toString())
             resultBundle.putString(NEW_AUTHOR, binding.editAuthor.editText?.text.toString())
             resultBundle.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
-            //resultBundle.putParcelableArrayList()
+            resultBundle.putSerializable(NEW_STEP, stepsData)
             setFragmentResult(REQUEST_KEY, resultBundle)
             parentFragmentManager.popBackStack()
             //findNavController().popBackStack()
         }
         AndroidUtils.hideKeyboard(binding.root)
-    }
-
-    private fun onFabStepButtonClicked(binding: RecipeContentFragmentBinding) {
-        if (binding.editStep.editText?.text.isNullOrBlank()) {
-            Toast.makeText(context, "сначала заполните поле шаг, пред тем как добавлять новый", Toast.LENGTH_SHORT).show()
-        } else {
-
-        }
     }
 
     companion object {
@@ -131,7 +154,7 @@ class RecipeContentFragment(
         const val NEW_TITLE = "newTitle"
         const val NEW_AUTHOR = "newAuthor"
         const val NEW_CATEGORY = "newCategory"
-        const val STEP = "step"
+        const val NEW_STEP = "step"
     }
 
 }

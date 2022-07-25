@@ -35,6 +35,9 @@
             android:name="StepsInitialContent"
             app:argType="ru.netology.nerecipe.data.StepsCreateResult"
             app:nullable="true" />-->
+        <action
+            android:id="@+id/toStepContentFragment"
+            app:destination="@id/stepContentFragment" />
     </fragment>
 
     <fragment
@@ -71,6 +74,15 @@
         android:name="ru.netology.nerecipe.ui.CheckboxFragment"
         tools:layout="@layout/checkboxes_fragment" >
 
+    </fragment>
+    <fragment
+        android:id="@+id/stepContentFragment"
+        android:name="ru.netology.nerecipe.ui.StepContentFragment"
+        android:label="step_content_fragment"
+        tools:layout="@layout/step_content_fragment" >
+        <action
+            android:id="@+id/toRecipeContentFragment"
+            app:destination="@id/recipeContentFragment" />
     </fragment>
 
 </navigation>

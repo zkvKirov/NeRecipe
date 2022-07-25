@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipeInteractionListener
+import ru.netology.nerecipe.adapter.StepInteractionListener
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
+import ru.netology.nerecipe.data.StepCreateResult
 import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.repository.FileRecipeRepositoryImpl
 import ru.netology.nerecipe.repository.RecipeRepository
@@ -15,7 +17,7 @@ import kotlin.properties.Delegates
 
 class RecipeViewModel(
     application: Application
-) : AndroidViewModel(application), RecipeInteractionListener {
+) : AndroidViewModel(application), RecipeInteractionListener, StepInteractionListener {
 
     private val repository: RecipeRepository = FileRecipeRepositoryImpl(application)
 
@@ -23,18 +25,23 @@ class RecipeViewModel(
     val data = repository.getAll()
     var recipeId by Delegates.notNull<Int>()
 
-    val stepsData: MutableLiveData<StepsCard> by lazy {
-        MutableLiveData<StepsCard>()
-    }
+    private var stepsData: ArrayList<StepsCard> = ArrayList()
+    private var stepCreateResult: StepCreateResult = StepCreateResult("", null)
 
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
+    val navigateToStepContentScreenEvent = SingleLiveEvent<StepCreateResult?>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
     val navigateToFullRecipeFragment = SingleLiveEvent<Int>()
     private val currentRecipe = MutableLiveData<RecipeCard?> (null)
+    //private val stepsData = MutableLiveData<StepsCard?> (null)
 
     fun onAddButtonClicked(draft: RecipeCreateResult?) {
         navigateToRecipeContentScreenEvent.value = draft
+    }
+
+    fun onAddStepClicked(draftStep: StepCreateResult?) {
+        navigateToStepContentScreenEvent.value = draftStep
     }
 
     fun onFavoriteButtonClicked() {
@@ -54,16 +61,28 @@ class RecipeViewModel(
         val newRecipe = currentRecipe.value?.copy(
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
-            category = recipeCreateResult.newCategory
+            category = recipeCreateResult.newCategory,
+            stepsCard = stepsData
         ) ?: RecipeCard(
             id = RecipeRepository.NEW_RECIPE_ID,
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
-            category = recipeCreateResult.newCategory
+            category = recipeCreateResult.newCategory,
+            stepsCard = stepsData
         )
         repository.save(newRecipe)
         Toast.makeText(getApplication(), "Успех", Toast.LENGTH_SHORT).show()
         currentRecipe.value = null
+    }
+
+    fun onSaveStepButtonClicked(stepCreateResult: StepCreateResult) : ArrayList<StepsCard> {
+        //if (stepCreateResult.newContent.isBlank()) return
+        val newStep = StepsCard(
+            content = stepCreateResult.newContent,
+            picture = stepCreateResult.newPicture
+        )
+        stepsData.add(newStep)
+        return stepsData
     }
 
     override fun onFavoriteClicked(card: RecipeCard) {
@@ -76,13 +95,21 @@ class RecipeViewModel(
     }
 
     override fun onEditClicked(card: RecipeCard) {
-        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category)
+        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category, card.stepsCard)
         currentRecipe.value = card
     }
 
     override fun onRecipeClicked(card: RecipeCard) {
         navigateToFullRecipeFragment.value = card.id
         recipeId = card.id
+    }
+
+    override fun onStepRemoveClicked(stepsCard: StepsCard) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onStepEditClicked(stepsCard: StepsCard) {
+        TODO("Not yet implemented")
     }
 
 

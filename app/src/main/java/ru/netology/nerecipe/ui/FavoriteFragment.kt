@@ -16,6 +16,7 @@ import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeAdapter
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
+import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.databinding.FavoriteFragmentBinding
 import ru.netology.nerecipe.helper.SimpleItemTouchHelperCallback
 import ru.netology.nerecipe.viewModel.RecipeViewModel
@@ -120,12 +121,13 @@ class FavoriteFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newSteps = bundle[RecipeContentFragment.STEP].toString()
+            val newSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
             viewModel.onSaveButtonClicked(
                 RecipeCreateResult(
                     newTitle,
                     newAuthor,
-                    newCategory
+                    newCategory,
+                    newSteps
                 )
             )
         }

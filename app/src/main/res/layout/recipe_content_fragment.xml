@@ -84,43 +84,14 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edit_step"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/common_spacing"
-                android:hint="@string/add_step"
-                android:inputType="textMultiLine"
-                app:endIconMode="clear_text"
-                app:errorEnabled="true"
-                app:helperText="*обязательное поле"
-                app:helperTextEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/category">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/step_text_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/picture_url"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/common_spacing"
-                android:hint="введи адрес картинки для шага рецепта"
-                android:inputType="text"
-                app:layout_constraintTop_toBottomOf="@id/edit_step">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/picture_url_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toTopOf="@id/fab_step"
+                app:layout_constraintBottom_toBottomOf="@id/fab_step"
+                app:layout_constraintEnd_toStartOf="@id/fab_step"
+                android:textSize="16sp"
+                android:text="Чтобы добавить этап рецепта нажмите"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_step"
@@ -128,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/common_spacing"
                 android:contentDescription="@string/add_step"
-                app:layout_constraintTop_toBottomOf="@id/picture_url"
+                app:layout_constraintTop_toBottomOf="@id/category"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_add_24dp" />
 
