@@ -11,6 +11,7 @@ import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.databinding.RecipeCardBinding
 import ru.netology.nerecipe.helper.ItemTouchHelperAdapter
+import ru.netology.nerecipe.ui.FullRecipeFragment
 import ru.netology.nerecipe.ui.RecipeFragment
 import java.util.*
 import kotlin.collections.ArrayList
@@ -107,13 +108,16 @@ class RecipeCardViewHolder(
 
     fun bind(card: RecipeCard) {
         this.card = card
+        val adapter = FullRecipeFragment().adapter
+
         with(binding) {
             title.text = card.title
             authorName.text = card.author
             category.text = card.category
             favorite.isChecked = card.isFavorite
-            //stepsList = card.stepsCard
+            adapter?.submitList(card.stepsCard)
         }
+
     }
 
 }

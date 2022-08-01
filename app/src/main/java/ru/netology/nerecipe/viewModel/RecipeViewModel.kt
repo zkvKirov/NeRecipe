@@ -23,10 +23,11 @@ class RecipeViewModel(
 
     //val data by repository::data
     val data = repository.getAll()
-    var recipeId by Delegates.notNull<Int>()
+    private var recipeId by Delegates.notNull<Int>()
+    private var newStepId = 0
 
     private var stepsData: ArrayList<StepsCard> = ArrayList()
-    private var stepCreateResult: StepCreateResult = StepCreateResult("", null)
+    //private var stepCreateResult: StepCreateResult = StepCreateResult("", null)
 
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
     val navigateToStepContentScreenEvent = SingleLiveEvent<StepCreateResult?>()
@@ -56,7 +57,8 @@ class RecipeViewModel(
         if (
             recipeCreateResult.newTitle.isBlank() &&
             recipeCreateResult.newAuthor.isBlank() &&
-            recipeCreateResult.newCategory.isBlank()
+            recipeCreateResult.newCategory.isBlank() &&
+            recipeCreateResult.newStepsCard.isEmpty()
                 ) return
         val newRecipe = currentRecipe.value?.copy(
             title = recipeCreateResult.newTitle,
@@ -78,9 +80,11 @@ class RecipeViewModel(
     fun onSaveStepButtonClicked(stepCreateResult: StepCreateResult) : ArrayList<StepsCard> {
         //if (stepCreateResult.newContent.isBlank()) return
         val newStep = StepsCard(
+            id = newStepId,
             content = stepCreateResult.newContent,
             picture = stepCreateResult.newPicture
         )
+        ++newStepId
         stepsData.add(newStep)
         return stepsData
     }
@@ -95,7 +99,8 @@ class RecipeViewModel(
     }
 
     override fun onEditClicked(card: RecipeCard) {
-        navigateToRecipeContentScreenEvent.value = RecipeCreateResult(card.title, card.author, card.category, card.stepsCard)
+        navigateToRecipeContentScreenEvent.value =
+            card.stepsCard?.let { RecipeCreateResult(card.title, card.author, card.category, it) }
         currentRecipe.value = card
     }
 

@@ -1,10 +1,13 @@
 package ru.netology.nerecipe.adapter
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.StepsCard
@@ -13,7 +16,8 @@ import ru.netology.nerecipe.databinding.RecipeStepsBinding
 class StepAdapter(
     private val interactionListener: StepInteractionListener,
     private val steps: List<StepsCard>
-) : RecyclerView.Adapter<StepsCardViewHolder>() {
+) : ListAdapter<StepsCard, StepsCardViewHolder>(PostDiffCallback) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepsCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RecipeStepsBinding.inflate(inflater, parent, false)
@@ -22,6 +26,15 @@ class StepAdapter(
 
     override fun onBindViewHolder(holder: StepsCardViewHolder, position: Int) {
         holder.bind(steps[position])
+    }
+
+    private object PostDiffCallback : DiffUtil.ItemCallback<StepsCard>() {
+        override fun areItemsTheSame(oldItem: StepsCard, newItem: StepsCard) =
+            oldItem.id == newItem.id
+
+        @SuppressLint("DiffUtilEquals")
+        override fun areContentsTheSame(oldItem: StepsCard, newItem: StepsCard) =
+            oldItem == newItem
     }
 
     override fun getItemCount(): Int = steps.size

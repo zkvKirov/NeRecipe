@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.addCallback
 import androidx.fragment.app.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputLayout
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.data.StepCreateResult
@@ -16,15 +14,22 @@ import ru.netology.nerecipe.databinding.RecipeContentFragmentBinding
 import ru.netology.nerecipe.util.AndroidUtils
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
-class RecipeContentFragment(
-    private val initialContent: RecipeCreateResult?
-) : Fragment() {
+class RecipeContentFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
     private var draftStep: StepCreateResult? = null
     private var stepsData: ArrayList<StepsCard> = ArrayList()
+
+    private val initialContent: RecipeCreateResult? = null
+        get() {
+            requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_TITLE)
+            requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_AUTHOR)
+            requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_CATEGORY)
+            requireArguments().getSerializable(INITIAL_CONTENT_ARGUMENTS_STEPS)
+            return field
+        }
 
     //private val args by navArgs<RecipeContentFragmentArgs>()
 
@@ -141,7 +146,7 @@ class RecipeContentFragment(
             resultBundle.putString(NEW_AUTHOR, binding.editAuthor.editText?.text.toString())
             resultBundle.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
             resultBundle.putSerializable(NEW_STEP, stepsData)
-            setFragmentResult(REQUEST_KEY, resultBundle)
+            setFragmentResult(RECIPE_KEY, resultBundle)
             parentFragmentManager.popBackStack()
             //findNavController().popBackStack()
         }
@@ -149,12 +154,26 @@ class RecipeContentFragment(
     }
 
     companion object {
-        const val REQUEST_KEY = "createRecipe"
+        const val RECIPE_KEY = "createRecipe"
         const val DRAFT_KEY = "draftRecipe"
         const val NEW_TITLE = "newTitle"
         const val NEW_AUTHOR = "newAuthor"
         const val NEW_CATEGORY = "newCategory"
-        const val NEW_STEP = "step"
+        const val NEW_STEP = "newStep"
+
+        private const val INITIAL_CONTENT_ARGUMENTS_TITLE = "InitialContentTitle"
+        private const val INITIAL_CONTENT_ARGUMENTS_AUTHOR = "InitialContentAuthor"
+        private const val INITIAL_CONTENT_ARGUMENTS_CATEGORY = "InitialContentCategory"
+        private const val INITIAL_CONTENT_ARGUMENTS_STEPS = "InitialContentStepsCard"
+
+        fun create(initialContent: RecipeCreateResult?) = RecipeContentFragment().apply {
+            arguments = Bundle(4).also {
+                it.putString(INITIAL_CONTENT_ARGUMENTS_TITLE, initialContent?.newTitle)
+                it.putString(INITIAL_CONTENT_ARGUMENTS_AUTHOR, initialContent?.newAuthor)
+                it.putString(INITIAL_CONTENT_ARGUMENTS_CATEGORY, initialContent?.newCategory)
+                it.putSerializable(INITIAL_CONTENT_ARGUMENTS_STEPS, initialContent?.newStepsCard)
+            }
+        }
     }
 
 }

@@ -115,9 +115,9 @@ class FavoriteFragment : Fragment() {
         }
 
         setFragmentResultListener(
-            requestKey = RecipeContentFragment.REQUEST_KEY
+            requestKey = RecipeContentFragment.RECIPE_KEY
         ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            if (requestKey != RecipeContentFragment.RECIPE_KEY) return@setFragmentResultListener
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()

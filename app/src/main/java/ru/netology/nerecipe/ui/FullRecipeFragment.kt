@@ -24,8 +24,8 @@ class FullRecipeFragment : Fragment() {
 
     private val args by navArgs<FullRecipeFragmentArgs>()
 
-    private lateinit var adapter: StepAdapter
     private var stepsList: ArrayList<StepsCard> = ArrayList()
+    var adapter: StepAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +50,11 @@ class FullRecipeFragment : Fragment() {
             val recipe = recipes.find {
                 it.id == args.recipeId
             } ?: run {
+
                 findNavController().navigateUp()
                 return@observe
             }
+            adapter!!.submitList(recipe.stepsCard)
             viewHolder.bind(recipe)
         }
     }.root
@@ -61,13 +63,14 @@ class FullRecipeFragment : Fragment() {
         super.onResume()
 
         setFragmentResultListener(
-            requestKey = RecipeContentFragment.REQUEST_KEY
+            requestKey = RecipeContentFragment.RECIPE_KEY
         ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            if (requestKey != RecipeContentFragment.RECIPE_KEY) return@setFragmentResultListener
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
             val newSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+
             viewModel.onSaveButtonClicked(RecipeCreateResult(newTitle, newAuthor, newCategory, newSteps))
         }
     }

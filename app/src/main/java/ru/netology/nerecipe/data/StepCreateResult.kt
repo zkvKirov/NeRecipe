@@ -1,6 +1,7 @@
 package ru.netology.nerecipe.data
 
 import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

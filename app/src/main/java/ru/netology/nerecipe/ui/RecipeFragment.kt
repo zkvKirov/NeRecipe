@@ -41,7 +41,7 @@ class RecipeFragment : Fragment() {
 
         viewModel.navigateToRecipeContentScreenEvent.observe(this) {
             parentFragmentManager.commit {
-                replace(R.id.nav_host_fragment, RecipeContentFragment(it))
+                replace(R.id.nav_host_fragment, RecipeContentFragment.create(it))
                 addToBackStack(null)
             }
         }
@@ -140,9 +140,9 @@ class RecipeFragment : Fragment() {
         }
 
         setFragmentResultListener(
-            requestKey = RecipeContentFragment.REQUEST_KEY
+            requestKey = RecipeContentFragment.RECIPE_KEY
         ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            if (requestKey != RecipeContentFragment.RECIPE_KEY) return@setFragmentResultListener
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
@@ -238,7 +238,6 @@ class RecipeFragment : Fragment() {
     }
 
     private fun filterFilter(arrayList: List<String>) : ArrayList<RecipeCard> {
-        //val filteredList: ArrayList<RecipeCard> = ArrayList()
         for (item in recipeCardsList) {
             for (text in arrayList) {
                 if (item.category.lowercase() == text.lowercase())
