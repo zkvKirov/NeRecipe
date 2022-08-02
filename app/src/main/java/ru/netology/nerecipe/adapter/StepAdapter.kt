@@ -14,8 +14,7 @@ import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.databinding.RecipeStepsBinding
 
 class StepAdapter(
-    private val interactionListener: StepInteractionListener,
-    private val steps: List<StepsCard>
+    private val interactionListener: StepInteractionListener
 ) : ListAdapter<StepsCard, StepsCardViewHolder>(PostDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepsCardViewHolder {
@@ -25,7 +24,7 @@ class StepAdapter(
     }
 
     override fun onBindViewHolder(holder: StepsCardViewHolder, position: Int) {
-        holder.bind(steps[position])
+        holder.bind(getItem(position))
     }
 
     private object PostDiffCallback : DiffUtil.ItemCallback<StepsCard>() {
@@ -37,7 +36,6 @@ class StepAdapter(
             oldItem == newItem
     }
 
-    override fun getItemCount(): Int = steps.size
 }
 
 class StepsCardViewHolder(

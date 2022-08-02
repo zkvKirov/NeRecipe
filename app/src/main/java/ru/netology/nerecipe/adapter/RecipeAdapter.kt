@@ -11,20 +11,17 @@ import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.databinding.RecipeCardBinding
 import ru.netology.nerecipe.helper.ItemTouchHelperAdapter
-import ru.netology.nerecipe.ui.FullRecipeFragment
-import ru.netology.nerecipe.ui.RecipeFragment
 import java.util.*
-import kotlin.collections.ArrayList
 
 class RecipeAdapter(
     private val interactionListener: RecipeInteractionListener,
-    private var recipeCardsList: ArrayList<RecipeCard>
+    private val stepsListener: StepInteractionListener
 ) : ListAdapter<RecipeCard, RecipeCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RecipeCardBinding.inflate(inflater, parent, false)
-        return RecipeCardViewHolder(binding, interactionListener)
+        return RecipeCardViewHolder(binding, interactionListener, stepsListener)
     }
 
     override fun onBindViewHolder(holder: RecipeCardViewHolder, position: Int) {
@@ -40,16 +37,17 @@ class RecipeAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        val updated = currentList.toMutableList()
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(recipeCardsList, i, i + 1)
+                Collections.swap(updated, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(recipeCardsList, i, i - 1)
+                Collections.swap(updated, i, i - 1)
             }
         }
-        notifyItemMoved(fromPosition, toPosition)
+        submitList(updated)
         return true
     }
 }
@@ -57,10 +55,12 @@ class RecipeAdapter(
 
 class RecipeCardViewHolder(
     private val binding: RecipeCardBinding,
-    listener: RecipeInteractionListener
+    listener: RecipeInteractionListener,
+    stepsListener: StepInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var card: RecipeCard
+    private var adapter = StepAdapter(stepsListener)
 
     private val popupMenu by lazy {
         PopupMenu(itemView.context, binding.menu).apply {
@@ -108,16 +108,14 @@ class RecipeCardViewHolder(
 
     fun bind(card: RecipeCard) {
         this.card = card
-        val adapter = FullRecipeFragment().adapter
 
         with(binding) {
             title.text = card.title
             authorName.text = card.author
             category.text = card.category
             favorite.isChecked = card.isFavorite
-            adapter?.submitList(card.stepsCard)
+            adapter.submitList(card.stepsCard)
         }
 
     }
-
 }

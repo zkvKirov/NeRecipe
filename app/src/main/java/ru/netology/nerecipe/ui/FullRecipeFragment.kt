@@ -23,9 +23,7 @@ class FullRecipeFragment : Fragment() {
     )
 
     private val args by navArgs<FullRecipeFragmentArgs>()
-
-    private var stepsList: ArrayList<StepsCard> = ArrayList()
-    var adapter: StepAdapter? = null
+    private lateinit var adapter: StepAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +39,9 @@ class FullRecipeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FullRecipeFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        adapter = StepAdapter(viewModel, stepsList)
+        val viewHolder = RecipeCardViewHolder(binding.fullRecipe, viewModel, viewModel)
+        adapter = StepAdapter(viewModel)
         binding.fullRecipe.stepsList.adapter = adapter
-        val viewHolder = RecipeCardViewHolder(binding.fullRecipe, viewModel)
 
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
             binding.fullRecipe.stepsList.visibility = View.VISIBLE
@@ -54,7 +52,7 @@ class FullRecipeFragment : Fragment() {
                 findNavController().navigateUp()
                 return@observe
             }
-            adapter!!.submitList(recipe.stepsCard)
+            adapter.submitList(recipe.stepsCard)
             viewHolder.bind(recipe)
         }
     }.root

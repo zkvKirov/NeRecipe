@@ -60,7 +60,7 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = FavoriteFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
         recipeCardsList = ArrayList()
-        adapter = RecipeAdapter(viewModel, recipeCardsList)
+        adapter = RecipeAdapter(viewModel, viewModel)
         binding.listFavorite.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
             val favorite = recipes.filter { it.isFavorite }

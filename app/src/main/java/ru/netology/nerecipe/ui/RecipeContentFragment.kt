@@ -22,22 +22,6 @@ class RecipeContentFragment : Fragment() {
     private var draftStep: StepCreateResult? = null
     private var stepsData: ArrayList<StepsCard> = ArrayList()
 
-    private val initialContent: RecipeCreateResult? = null
-        get() {
-            requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_TITLE)
-            requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_AUTHOR)
-            requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_CATEGORY)
-            requireArguments().getSerializable(INITIAL_CONTENT_ARGUMENTS_STEPS)
-            return field
-        }
-
-    //private val args by navArgs<RecipeContentFragmentArgs>()
-
-      // код для добавления поля edit text по нажатию на кнопке
-//    private lateinit var mLayout: ConstraintLayout
-//    private lateinit var mEditText: TextInputLayout
-//    private lateinit var mButton: FloatingActionButton
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,9 +44,9 @@ class RecipeContentFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
         (binding.category.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-        binding.editTitle.editText?.setText(initialContent?.newTitle)
-        binding.editAuthor.editText?.setText(initialContent?.newAuthor)
-        binding.category.editText?.setText(initialContent?.newCategory)
+        binding.editTitle.editText?.setText(requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_TITLE))
+        binding.editAuthor.editText?.setText(requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_AUTHOR))
+        binding.category.editText?.setText(requireArguments().getString(INITIAL_CONTENT_ARGUMENTS_CATEGORY))
 
         binding.editTitle.requestFocus(0)
 
@@ -73,17 +57,6 @@ class RecipeContentFragment : Fragment() {
         binding.fabStep.setOnClickListener {
             viewModel.onAddStepClicked(draftStep)
         }
-
-        // код для добавления поля edit text по нажатию на кнопке
-//        mLayout = binding.recipeEditWindow
-//        mEditText = binding.editStep
-//        mButton = binding.fabStep
-//        //mButton.setOnClickListener(onFabStepButtonClicked()) // (2 вариант)
-//        mButton.setOnClickListener {
-//            val lParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-//            lParams.addRule(RelativeLayout.BELOW, R.id.edit_step)
-//            mLayout.addView(mEditText, lParams)
-//        }
 
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             val draft = Bundle(4)
@@ -115,19 +88,6 @@ class RecipeContentFragment : Fragment() {
             )
         }
     }
-
-    // код для добавления поля edit text по нажатию на кнопке (2 вариант)
-//    private fun onFabStepButtonClicked(): View.OnClickListener? {//
-//        mLayout.addView(createNewTextView())
-//        return
-//    }
-
-//    private fun createNewTextView(): View {
-//        val lParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-//        val textView: TextView = TextView(context)
-//        textView.layoutParams = lParams
-//        return textView
-//    }
 
     private fun onOkButtonClicked(binding: RecipeContentFragmentBinding) {
         binding.editTitle.error = null

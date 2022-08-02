@@ -65,7 +65,7 @@ class RecipeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = RecipeFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        adapter = RecipeAdapter(viewModel, recipeCardsList)
+        adapter = RecipeAdapter(viewModel, viewModel)
         binding.listOfRecipes.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
