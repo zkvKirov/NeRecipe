@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class StepsCard(
+data class StepsCard(
     @SerializedName("id")
     val id: Int,
     @SerializedName("content")

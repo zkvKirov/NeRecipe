@@ -40,7 +40,6 @@ class RecipeContentFragment : Fragment() {
     ) = RecipeContentFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
 
         val items = listOf("Европейская", "Азиатская", "Паназиатская", "Восточная", "Американская", "Русская", "Средиземноморская")
-        //val items = listOf("Europe", "Asia", "Pan-Asian", "Eastern", "American", "Russian", "Mediterranean")
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
         (binding.category.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
@@ -64,9 +63,12 @@ class RecipeContentFragment : Fragment() {
             draft.putString(NEW_AUTHOR, binding.editAuthor.editText?.text.toString())
             draft.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
             setFragmentResult(DRAFT_KEY, draft)
-            Toast.makeText(context, "черновик рецепта сохранён", Toast.LENGTH_SHORT).show()
+            if (
+                binding.editTitle.editText?.text?.isNotBlank() == true ||
+                binding.editAuthor.editText?.text?.isNotBlank() == true ||
+                binding.category.editText?.text?.isNotBlank() == true
+            ) Toast.makeText(context, "Черновик рецепта сохранён", Toast.LENGTH_SHORT).show()
             parentFragmentManager.popBackStack()
-            //findNavController().popBackStack()
         }
 
     }.root
@@ -105,10 +107,13 @@ class RecipeContentFragment : Fragment() {
             resultBundle.putString(NEW_TITLE, binding.editTitle.editText?.text.toString())
             resultBundle.putString(NEW_AUTHOR, binding.editAuthor.editText?.text.toString())
             resultBundle.putString(NEW_CATEGORY, binding.category.editText?.text.toString())
-            resultBundle.putSerializable(NEW_STEP, stepsData)
+            if (viewModel.currentRecipe.value == null) {
+                resultBundle.putSerializable(NEW_STEP, stepsData)
+            } else {
+                resultBundle.putSerializable(NEW_STEP, viewModel.currentRecipe.value?.stepsCard)
+            }
             setFragmentResult(RECIPE_KEY, resultBundle)
             parentFragmentManager.popBackStack()
-            //findNavController().popBackStack()
         }
         AndroidUtils.hideKeyboard(binding.root)
     }

@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.databinding.RecipeStepsBinding
+import ru.netology.nerecipe.helper.ItemTouchHelperAdapter
+import java.util.*
 
 class StepAdapter(
     private val interactionListener: StepInteractionListener
-) : ListAdapter<StepsCard, StepsCardViewHolder>(PostDiffCallback) {
+) : ListAdapter<StepsCard, StepsCardViewHolder>(PostDiffCallback), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepsCardViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -34,6 +36,21 @@ class StepAdapter(
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: StepsCard, newItem: StepsCard) =
             oldItem == newItem
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        val updated = currentList.toMutableList()
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(updated, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(updated, i, i - 1)
+            }
+        }
+        submitList(updated)
+        return true
     }
 
 }

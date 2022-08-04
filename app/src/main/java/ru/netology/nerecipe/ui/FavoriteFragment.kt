@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -36,8 +37,10 @@ class FavoriteFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.navigateToRecipeContentScreenEvent.observe(this) {
-            val direction = FavoriteFragmentDirections.toRecipeContentFragment()
-            findNavController().navigate(direction)
+            parentFragmentManager.commit {
+                replace(R.id.nav_host_fragment, RecipeContentFragment.create(it))
+                addToBackStack(null)
+            }
         }
 
         viewModel.navigateToRecipeFragment.observe(this) {
@@ -121,7 +124,12 @@ class FavoriteFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+            val newSteps: ArrayList<StepsCard> =
+                if (bundle[RecipeContentFragment.NEW_STEP] != null) {
+                    bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+                } else {
+                    ArrayList()
+                }
             viewModel.onSaveButtonClicked(
                 RecipeCreateResult(
                     newTitle,

@@ -146,7 +146,12 @@ class RecipeFragment : Fragment() {
             val newTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+            val newSteps: ArrayList<StepsCard> =
+                if (bundle[RecipeContentFragment.NEW_STEP] != null) {
+                    bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+                } else {
+                    ArrayList()
+                }
             viewModel.onSaveButtonClicked(
                 RecipeCreateResult(
                     newTitle,
@@ -165,7 +170,12 @@ class RecipeFragment : Fragment() {
             val newRecipeTitle = bundle[RecipeContentFragment.NEW_TITLE].toString()
             val newRecipeAuthor = bundle[RecipeContentFragment.NEW_AUTHOR].toString()
             val newRecipeCategory = bundle[RecipeContentFragment.NEW_CATEGORY].toString()
-            val newRecipeSteps: ArrayList<StepsCard> = bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+            val newRecipeSteps: ArrayList<StepsCard> =
+                if (bundle[RecipeContentFragment.NEW_STEP] != null) {
+                bundle[RecipeContentFragment.NEW_STEP] as ArrayList<StepsCard>
+            } else {
+                ArrayList()
+            }
             draft = RecipeCreateResult(
                 newRecipeTitle,
                 newRecipeAuthor,
@@ -223,7 +233,7 @@ class RecipeFragment : Fragment() {
             }
         }
         if (searchList.isEmpty()) {
-            Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ничего не найдено", Toast.LENGTH_SHORT).show()
             searchList.clear()
             adapter.submitList(searchList)
         } else {
@@ -245,7 +255,7 @@ class RecipeFragment : Fragment() {
             }
         }
         if (filteredList.isEmpty()) {
-            Toast.makeText(context, "No Found...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Таких рецептов нет", Toast.LENGTH_SHORT).show()
             filteredList.clear()
             adapter.submitList(filteredList)
         } else {

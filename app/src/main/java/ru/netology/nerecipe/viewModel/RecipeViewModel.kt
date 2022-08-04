@@ -21,21 +21,20 @@ class RecipeViewModel(
 
     private val repository: RecipeRepository = FileRecipeRepositoryImpl(application)
 
-    //val data by repository::data
     val data = repository.getAll()
     private var recipeId by Delegates.notNull<Int>()
     private var newStepId = 0
 
-    private var stepsData: ArrayList<StepsCard> = ArrayList()
-    //private var stepCreateResult: StepCreateResult = StepCreateResult("", null)
+    private var currentCard = RecipeCard(-1, "", "", "", false, ArrayList())
 
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<RecipeCreateResult?>()
     val navigateToStepContentScreenEvent = SingleLiveEvent<StepCreateResult?>()
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
     val navigateToFullRecipeFragment = SingleLiveEvent<Int>()
-    private val currentRecipe = MutableLiveData<RecipeCard?> (null)
-    //private val stepsData = MutableLiveData<StepsCard?> (null)
+    val currentRecipe = MutableLiveData<RecipeCard?> (null)
+    private val currentStep = MutableLiveData<StepsCard?> (null)
+    private var stepsData: ArrayList<StepsCard> = ArrayList()
 
     fun onAddButtonClicked(draft: RecipeCreateResult?) {
         navigateToRecipeContentScreenEvent.value = draft
@@ -54,12 +53,10 @@ class RecipeViewModel(
     }
 
     fun onSaveButtonClicked(recipeCreateResult: RecipeCreateResult) {
-        if (
-            recipeCreateResult.newTitle.isBlank() &&
-            recipeCreateResult.newAuthor.isBlank() &&
-            recipeCreateResult.newCategory.isBlank() &&
-            recipeCreateResult.newStepsCard.isEmpty()
-                ) return
+        if (recipeCreateResult.newStepsCard.isEmpty()) {
+            Toast.makeText(getApplication(), "Рецепт не сохранён, добавьте в хотя бы один этап", Toast.LENGTH_LONG).show()
+            return
+        }
         val newRecipe = currentRecipe.value?.copy(
             title = recipeCreateResult.newTitle,
             author = recipeCreateResult.newAuthor,
@@ -73,19 +70,32 @@ class RecipeViewModel(
             stepsCard = stepsData
         )
         repository.save(newRecipe)
-        Toast.makeText(getApplication(), "Успех", Toast.LENGTH_SHORT).show()
+        Toast.makeText(getApplication(), "Рецепт создан/обновлён", Toast.LENGTH_SHORT).show()
         currentRecipe.value = null
     }
 
     fun onSaveStepButtonClicked(stepCreateResult: StepCreateResult) : ArrayList<StepsCard> {
-        //if (stepCreateResult.newContent.isBlank()) return
-        val newStep = StepsCard(
-            id = newStepId,
+        if (currentCard.id != -1) stepsData = currentCard.stepsCard
+        val newStep = currentStep.value?.copy(
             content = stepCreateResult.newContent,
             picture = stepCreateResult.newPicture
-        )
-        ++newStepId
-        stepsData.add(newStep)
+        ) ?: StepsCard(
+                id = newStepId,
+                content = stepCreateResult.newContent,
+                picture = stepCreateResult.newPicture
+            )
+        if (currentStep.value != null) {
+            stepsData.forEachIndexed { index, stepsCard ->
+                if (stepsCard.id == newStep.id) {
+                    stepsData[index] = newStep
+                }
+            }
+            currentCard.stepsCard = stepsData
+            repository.save(currentCard)
+        } else {
+            stepsData.add(newStep)
+            ++newStepId
+        }
         return stepsData
     }
 
@@ -95,27 +105,29 @@ class RecipeViewModel(
 
     override fun onRemoveClicked(card: RecipeCard) {
         repository.remove(card.id)
-        Toast.makeText(getApplication(), "Recipe was deleted", Toast.LENGTH_SHORT).show()
+        Toast.makeText(getApplication(), "Рецепт был удалён", Toast.LENGTH_SHORT).show()
     }
 
     override fun onEditClicked(card: RecipeCard) {
         navigateToRecipeContentScreenEvent.value =
-            card.stepsCard?.let { RecipeCreateResult(card.title, card.author, card.category, it) }
+            RecipeCreateResult(card.title, card.author, card.category, card.stepsCard)
         currentRecipe.value = card
     }
 
     override fun onRecipeClicked(card: RecipeCard) {
         navigateToFullRecipeFragment.value = card.id
         recipeId = card.id
+        currentCard = card
     }
 
     override fun onStepRemoveClicked(stepsCard: StepsCard) {
-        TODO("Not yet implemented")
+        currentCard.stepsCard.remove(stepsCard)
+        repository.save(currentCard)
     }
 
     override fun onStepEditClicked(stepsCard: StepsCard) {
-        TODO("Not yet implemented")
+        navigateToStepContentScreenEvent.value = StepCreateResult(stepsCard.content, stepsCard.picture)
+        currentStep.value = stepsCard
     }
-
 
 }
