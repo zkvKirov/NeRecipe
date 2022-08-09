@@ -10,10 +10,8 @@ import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.data.StepCreateResult
 import ru.netology.nerecipe.data.StepsCard
-import ru.netology.nerecipe.db.AppDb
 import ru.netology.nerecipe.repository.FileRecipeRepositoryImpl
 import ru.netology.nerecipe.repository.RecipeRepository
-import ru.netology.nerecipe.repository.RecipeRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import kotlin.properties.Delegates
 
@@ -21,13 +19,7 @@ class RecipeViewModel(
     application: Application
 ) : AndroidViewModel(application), RecipeInteractionListener, StepInteractionListener {
 
-//    private val repository: RecipeRepository = FileRecipeRepositoryImpl(application)
-
-    private val repository: RecipeRepository = RecipeRepositoryImpl(
-        dao = AppDb.getInstance(
-            context = application
-        ).postDao
-    )
+    private val repository: RecipeRepository = FileRecipeRepositoryImpl(application)
 
     val data = repository.getAll()
     private var recipeId by Delegates.notNull<Int>()
@@ -40,6 +32,7 @@ class RecipeViewModel(
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
     val navigateToFullRecipeFragment = SingleLiveEvent<Int>()
+    val navigateToFullStepPictureFragment = SingleLiveEvent<String>()
     val currentRecipe = MutableLiveData<RecipeCard?>(null)
     private val currentStep = MutableLiveData<StepsCard?>(null)
     private var stepsData: ArrayList<StepsCard> = ArrayList()
@@ -146,6 +139,13 @@ class RecipeViewModel(
     override fun stepMove(stepCards: MutableList<StepsCard>) {
         currentCard.stepsCard = stepCards as ArrayList<StepsCard>
         repository.save(currentCard)
+    }
+
+    override fun onStepPictureClicked(stepsCard: StepsCard) {
+        val url: String = requireNotNull(stepsCard.picture) {
+            "URL is absent"
+        }
+        navigateToFullStepPictureFragment.value = url
     }
 
 }

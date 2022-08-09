@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.data.StepsCard
 import ru.netology.nerecipe.databinding.RecipeStepsBinding
@@ -99,12 +100,19 @@ class StepsCardViewHolder(
         binding.menu.setOnClickListener {
             popupMenu.show()
         }
+        binding.picture.setOnClickListener {
+            listener.onStepPictureClicked(step)
+        }
     }
 
     fun bind(step: StepsCard) {
         this.step = step
         with(binding) {
             content.text = step.content
+            Glide.with(itemView.context)
+                .load(step.picture)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(picture)
         }
     }
 

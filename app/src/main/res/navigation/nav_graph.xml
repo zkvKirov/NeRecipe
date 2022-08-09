@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/recipeFragment"
         android:name="ru.netology.nerecipe.ui.RecipeFragment"
-        tools:layout="@layout/recipe_fragment" >
+        tools:layout="@layout/recipe_fragment">
         <action
             android:id="@+id/toRecipeContentFragment"
             app:destination="@id/recipeContentFragment" />
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/recipeContentFragment"
         android:name="ru.netology.nerecipe.ui.RecipeContentFragment"
-        tools:layout="@layout/recipe_content_fragment" >
+        tools:layout="@layout/recipe_content_fragment">
         <action
             android:id="@+id/toStepContentFragment"
             app:destination="@id/stepContentFragment" />
@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="ru.netology.nerecipe.ui.FavoriteFragment"
-        tools:layout="@layout/favorite_fragment" >
+        tools:layout="@layout/favorite_fragment">
         <action
             android:id="@+id/toRecipeFragment"
             app:destination="@id/recipeFragment" />
@@ -53,7 +53,7 @@
     <fragment
         android:id="@+id/fullRecipeFragment"
         android:name="ru.netology.nerecipe.ui.FullRecipeFragment"
-        tools:layout="@layout/full_recipe_fragment" >
+        tools:layout="@layout/full_recipe_fragment">
         <argument
             android:name="recipeId"
             app:argType="integer" />
@@ -63,21 +63,33 @@
         <action
             android:id="@+id/toStepContentFragment"
             app:destination="@id/stepContentFragment" />
+        <action
+            android:id="@+id/toFullStepPictureFragment"
+            app:destination="@id/fullStepPictureFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/checkboxFragment"
         android:name="ru.netology.nerecipe.ui.CheckboxFragment"
-        tools:layout="@layout/checkboxes_fragment" >
+        tools:layout="@layout/checkboxes_fragment">
 
     </fragment>
     <fragment
         android:id="@+id/stepContentFragment"
         android:name="ru.netology.nerecipe.ui.StepContentFragment"
         android:label="step_content_fragment"
-        tools:layout="@layout/step_content_fragment" >
+        tools:layout="@layout/step_content_fragment">
         <action
             android:id="@+id/toRecipeContentFragment"
             app:destination="@id/recipeContentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullStepPictureFragment"
+        android:name="ru.netology.nerecipe.ui.FullStepPictureFragment"
+        android:label="FullStepPictureFragment">
+        <argument
+            android:name="pictureUrl"
+            app:argType="string" />
     </fragment>
 
 </navigation>

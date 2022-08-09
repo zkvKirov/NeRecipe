@@ -46,6 +46,12 @@ class FullRecipeFragment : Fragment() {
                 addToBackStack(null)
             }
         }
+
+        viewModel.navigateToFullStepPictureFragment.observe(this) {
+            val direction = FullRecipeFragmentDirections.toFullStepPictureFragment(it)
+            findNavController().navigate(direction)
+        }
+
     }
 
     override fun onCreateView(
