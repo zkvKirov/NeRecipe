@@ -10,8 +10,10 @@ import ru.netology.nerecipe.data.RecipeCard
 import ru.netology.nerecipe.data.RecipeCreateResult
 import ru.netology.nerecipe.data.StepCreateResult
 import ru.netology.nerecipe.data.StepsCard
+import ru.netology.nerecipe.db.AppDb
 import ru.netology.nerecipe.repository.FileRecipeRepositoryImpl
 import ru.netology.nerecipe.repository.RecipeRepository
+import ru.netology.nerecipe.repository.RecipeRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import kotlin.properties.Delegates
 
@@ -19,7 +21,13 @@ class RecipeViewModel(
     application: Application
 ) : AndroidViewModel(application), RecipeInteractionListener, StepInteractionListener {
 
-    private val repository: RecipeRepository = FileRecipeRepositoryImpl(application)
+//    private val repository: RecipeRepository = FileRecipeRepositoryImpl(application)
+
+    private val repository: RecipeRepository = RecipeRepositoryImpl(
+        dao = AppDb.getInstance(
+            context = application
+        ).postDao
+    )
 
     val data = repository.getAll()
     private var recipeId by Delegates.notNull<Int>()
@@ -32,8 +40,8 @@ class RecipeViewModel(
     val navigateToFavoriteFragment = SingleLiveEvent<Unit>()
     val navigateToRecipeFragment = SingleLiveEvent<Unit>()
     val navigateToFullRecipeFragment = SingleLiveEvent<Int>()
-    val currentRecipe = MutableLiveData<RecipeCard?> (null)
-    private val currentStep = MutableLiveData<StepsCard?> (null)
+    val currentRecipe = MutableLiveData<RecipeCard?>(null)
+    private val currentStep = MutableLiveData<StepsCard?>(null)
     private var stepsData: ArrayList<StepsCard> = ArrayList()
 
     fun onAddButtonClicked(draft: RecipeCreateResult?) {
@@ -54,7 +62,11 @@ class RecipeViewModel(
 
     fun onSaveButtonClicked(recipeCreateResult: RecipeCreateResult) {
         if (recipeCreateResult.newStepsCard.isEmpty()) {
-            Toast.makeText(getApplication(), "Рецепт не сохранён, добавьте в хотя бы один этап", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                getApplication(),
+                "Рецепт не сохранён, добавьте в хотя бы один этап",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         val newRecipe = currentRecipe.value?.copy(
@@ -74,16 +86,16 @@ class RecipeViewModel(
         currentRecipe.value = null
     }
 
-    fun onSaveStepButtonClicked(stepCreateResult: StepCreateResult) : ArrayList<StepsCard> {
+    fun onSaveStepButtonClicked(stepCreateResult: StepCreateResult): ArrayList<StepsCard> {
         if (currentCard.id != -1) stepsData = currentCard.stepsCard
         val newStep = currentStep.value?.copy(
             content = stepCreateResult.newContent,
             picture = stepCreateResult.newPicture
         ) ?: StepsCard(
-                id = newStepId,
-                content = stepCreateResult.newContent,
-                picture = stepCreateResult.newPicture
-            )
+            id = newStepId,
+            content = stepCreateResult.newContent,
+            picture = stepCreateResult.newPicture
+        )
         if (currentStep.value != null) {
             stepsData.forEachIndexed { index, stepsCard ->
                 if (stepsCard.id == newStep.id) {
@@ -126,7 +138,8 @@ class RecipeViewModel(
     }
 
     override fun onStepEditClicked(stepsCard: StepsCard) {
-        navigateToStepContentScreenEvent.value = StepCreateResult(stepsCard.content, stepsCard.picture)
+        navigateToStepContentScreenEvent.value =
+            StepCreateResult(stepsCard.content, stepsCard.picture)
         currentStep.value = stepsCard
     }
 
