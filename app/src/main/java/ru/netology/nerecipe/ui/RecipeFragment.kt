@@ -31,8 +31,8 @@ class RecipeFragment : Fragment() {
     )
 
     private var draft: RecipeCreateResult? = null
-    private var checkboxes: MutableList<String> = ArrayList()
     private var recipeCardsList: ArrayList<RecipeCard> = ArrayList()
+    private var checkboxes: MutableList<String> = ArrayList()
     private val filteredList: ArrayList<RecipeCard> = ArrayList()
     private lateinit var adapter: RecipeAdapter
 
@@ -73,7 +73,6 @@ class RecipeFragment : Fragment() {
                 binding.emptySpace1.visibility = View.GONE
                 binding.listOfRecipes.visibility = View.VISIBLE
                 adapter.submitList(filteredList)
-                recipeCardsList.addAll(filteredList)
             } else {
                 if (recipes.isEmpty()) {
                     binding.listOfRecipes.visibility = View.GONE
@@ -88,6 +87,7 @@ class RecipeFragment : Fragment() {
                         }
                     }
                 }
+                recipeCardsList.clear()
                 recipeCardsList.addAll(recipes)
             }
         }

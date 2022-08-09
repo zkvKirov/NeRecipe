@@ -31,6 +31,7 @@ class FavoriteFragment : Fragment() {
 
     private var recipeCardsList: ArrayList<RecipeCard> = ArrayList()
     private var checkboxes: MutableList<String> = ArrayList()
+    private val filteredList: ArrayList<RecipeCard> = ArrayList()
     private lateinit var adapter: RecipeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,21 +63,31 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FavoriteFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        recipeCardsList = ArrayList()
         adapter = RecipeAdapter(viewModel, viewModel)
         binding.listFavorite.adapter = adapter
+
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
             val favorite = recipes.filter { it.isFavorite }
-            if (favorite.isEmpty()) {
-                binding.listFavorite.visibility = View.GONE
-                binding.emptySpace2.visibility = View.VISIBLE
-            } else {
+            if (filteredList.isNotEmpty()) {
                 binding.emptySpace2.visibility = View.GONE
                 binding.listFavorite.visibility = View.VISIBLE
-                adapter.submitList(favorite)
+                adapter.submitList(filteredList)
+            } else {
+                if (favorite.isEmpty()) {
+                    binding.listFavorite.visibility = View.GONE
+                    binding.emptySpace2.visibility = View.VISIBLE
+                } else {
+                    binding.emptySpace2.visibility = View.GONE
+                    binding.listFavorite.visibility = View.VISIBLE
+                    adapter.submitList(favorite)
+                }
+                recipeCardsList.clear()
+                recipeCardsList.addAll(favorite)
             }
-            recipeCardsList.addAll(favorite)
         }
+
+        filteredList.clear()
+
         binding.recipeButton.setOnClickListener {
             viewModel.onRecipeButtonClicked()
         }
@@ -158,7 +169,7 @@ class FavoriteFragment : Fragment() {
                     override fun onQueryTextChange(newText: String?): Boolean {
                         val userInput = newText?.lowercase()
                         if (userInput != null) {
-                            filter(userInput)
+                            searchFilter(userInput)
                         }
                         return true
                     }
@@ -168,33 +179,32 @@ class FavoriteFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.search -> {
-
                         true
                     }
                     R.id.filter -> {
                         onFilterButtonClicked()
                         true
                     }
-                    else -> return false
+                    else -> false
                 }
             }
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun filter(text: String) {
-        val filteredList: ArrayList<RecipeCard> = ArrayList()
+    private fun searchFilter(text: String) {
+        val searchList: ArrayList<RecipeCard> = ArrayList()
         for (item in recipeCardsList) {
             if (item.title.lowercase().contains(text.lowercase())) {
-                filteredList.add(item)
+                searchList.add(item)
             }
         }
-        if (filteredList.isEmpty()) {
-            Toast.makeText(context, "No Data Found...", Toast.LENGTH_SHORT).show()
-            filteredList.clear()
-            adapter.submitList(filteredList)
+        if (searchList.isEmpty()) {
+            Toast.makeText(context, "Ничего не найдено", Toast.LENGTH_SHORT).show()
+            searchList.clear()
+            adapter.submitList(searchList)
         } else {
-            adapter.submitList(filteredList)
+            adapter.submitList(searchList)
         }
     }
 
@@ -204,8 +214,7 @@ class FavoriteFragment : Fragment() {
         navigateToCheckboxFragment.call()
     }
 
-    private fun filterFilter(arrayList: List<String>) {
-        val filteredList: ArrayList<RecipeCard> = ArrayList()
+    private fun filterFilter(arrayList: List<String>) : ArrayList<RecipeCard> {
         for (item in recipeCardsList) {
             for (text in arrayList) {
                 if (item.category.lowercase() == text.lowercase())
@@ -213,12 +222,13 @@ class FavoriteFragment : Fragment() {
             }
         }
         if (filteredList.isEmpty()) {
-            Toast.makeText(context, "No Found...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Таких рецептов нет", Toast.LENGTH_SHORT).show()
             filteredList.clear()
             adapter.submitList(filteredList)
         } else {
             adapter.submitList(filteredList)
         }
+        return filteredList
     }
 
 }
