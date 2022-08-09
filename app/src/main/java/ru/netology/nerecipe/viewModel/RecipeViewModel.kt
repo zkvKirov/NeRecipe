@@ -130,4 +130,9 @@ class RecipeViewModel(
         currentStep.value = stepsCard
     }
 
+    override fun stepMove(stepCards: MutableList<StepsCard>) {
+        currentCard.stepsCard = stepCards as ArrayList<StepsCard>
+        repository.save(currentCard)
+    }
+
 }

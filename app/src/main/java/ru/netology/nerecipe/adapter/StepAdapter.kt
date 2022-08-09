@@ -50,6 +50,7 @@ class StepAdapter(
             }
         }
         submitList(updated)
+        interactionListener.stepMove(updated)
         return true
     }
 
